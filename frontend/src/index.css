@@ -1,0 +1,130 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+	font-family: 'digital-clock-font';
+	src: url('assets/digital-7.ttf');
+  }
+
+  .countdown {
+	color: #08fbd6;
+	
+    font-size: 2.5rem; /* Set the font size to 2.5rem (adjust as needed) */
+	font-family: 'digital-clock-font'; /* Fallback font in case custom font fails to load */
+	/* Add any additional styling here */
+  }
+
+#root {
+    /* max-width: 1280px; */
+    margin: 0 auto;
+    padding: 3rem;
+    text-align: center;
+  }
+  
+body {
+	background: url("/bgb.png");
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, and Opera */
+}
+.card-body2{
+	padding: 0 1rem;
+}
+.question-numberboard {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .box {
+    width: 45px;
+    height: 45px;
+    margin: 6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+	position: relative;
+  }
+
+  .inner-box {
+	width: 15px;
+	height: 15px;
+	background-color: red;
+	position: absolute; /* Position the inner box absolutely within the parent */
+	bottom: 0;
+	left:0;
+  }
+  
+  .scrollable-container {
+	max-height: 300px; /* Maximum height before scrolling */
+	overflow: auto; /* Enable scrolling */
+	display: flex;
+	flex-wrap: wrap;
+  }
+
+
+/* dark mode looking scrollbar */
+::-webkit-scrollbar {
+	width: 8px;
+}
+
+::-webkit-scrollbar-track {
+	background: #555;
+}
+
+::-webkit-scrollbar-thumb {
+	background: #121212;
+	border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: #242424;
+}
+
+.radio-options {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.radio-options label {
+  flex-basis: 47%;
+  box-sizing: border-box;
+  padding: 10px;
+  margin: 10px;
+  text-align: left;
+  margin-bottom: 0.5rem;
+  border-radius: 5px;
+  border: 2px solid #ccc;
+  color: #333;
+  cursor: pointer;
+  background-color: #e0e7df;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.radio-options label span{
+  background-color: #4b525a; 
+  border-radius: 50%;
+  padding: 8px 12px;
+  color:white;
+}
+
+.radio-options label:nth-child(even) {
+  text-align: left;
+}
+
+input[type="radio"] {
+  display: none;
+}
+
+.labelselected {
+  background-color: #6e7c81!important;
+  border-color: #08fb0c!important;
+  border-width: 2.5px!important;
+}
