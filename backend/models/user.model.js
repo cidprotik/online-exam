@@ -21,9 +21,9 @@ const userSchema = new mongoose.Schema(
 			required: true,
 			enum: ["male", "female"],
 		},
-		profilePic: {
+		phonenumber: {
 			type: String,
-			default: "",
+			length: 10,
 		},
 		// createdAt, updatedAt => Member since <createdAt>
 	},

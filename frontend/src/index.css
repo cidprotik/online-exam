@@ -2,18 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
-	font-family: 'digital-clock-font';
-	src: url('assets/digital-7.ttf');
-  }
+/* css start for countdown timer */
+
+  @font-face {
+    font-family: 'digital-clock-font';
+    src: url('assets/digital-7.ttf');
+    }
 
   .countdown {
-	color: #08fbd6;
-	
+	  color: #08fbd6;
     font-size: 2.5rem; /* Set the font size to 2.5rem (adjust as needed) */
-	font-family: 'digital-clock-font'; /* Fallback font in case custom font fails to load */
-	/* Add any additional styling here */
+	  font-family: 'digital-clock-font'; /* Fallback font in case custom font fails to load */
   }
+
+   /* css end for countdown timer  */
+
 
 #root {
     /* max-width: 1280px; */
@@ -69,7 +72,7 @@ body {
   }
 
 
-/* dark mode looking scrollbar */
+/* css start for dark mode scrollbar */
 ::-webkit-scrollbar {
 	width: 8px;
 }
@@ -87,6 +90,17 @@ body {
 	background: #242424;
 }
 
+/* css end for dark mode scrollbar */
+
+/* css start for disable full screen cross button */
+
+::-webkit-media-controls-enclosure {
+  display: none !important;
+}
+
+/* css end for disable full screen cross button */
+
+/* css start for question options*/
 .radio-options {
   display: flex;
   flex-wrap: wrap;
@@ -128,3 +142,6 @@ input[type="radio"] {
   border-color: #08fb0c!important;
   border-width: 2.5px!important;
 }
+
+/* css end for question options */
+

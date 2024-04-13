@@ -2,6 +2,7 @@ import "./App.css";
 import Home from "./pages/home/Home";
 import Countdown from "react-countdown";
 import React, { useState,useEffect } from "react";
+import screenfull from 'screenfull';
 function App() {
   const boxes = [];
 
@@ -47,21 +48,38 @@ function App() {
     selectedLabel.style.color = "#08fb0c";
   };
 
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  useEffect(() => {
+    screenfull.on('change', () => {
+      setIsFullscreen(screenfull.isFullscreen);
+    });
+
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape' && screenfull.isFullscreen) {
+        screenfull.exit();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
+
   const handleFullscreenToggle = () => {
-    if (document.fullscreenElement) {
-      // If already in fullscreen mode, exit fullscreen
-      document.exitFullscreen()
-        .catch(err => {
-          console.error('Error exiting fullscreen mode:', err);
-        });
+    if (screenfull.isEnabled) {
+      if (screenfull.isFullscreen) {
+        screenfull.exit();
+      } else {
+        screenfull.request(document.documentElement);
+      }
     } else {
-      // If not in fullscreen mode, request fullscreen for the document
-      document.documentElement.requestFullscreen()
-        .catch(err => {
-          console.error('Error entering fullscreen mode:', err);
-        });
+      console.error('Fullscreen mode is not supported');
     }
   };
+  
 
   return (
     <>
