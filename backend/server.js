@@ -6,6 +6,7 @@ import authRoutes from "./routes/auth.routes.js";
 import messageRoutes from "./routes/message.routes.js";
 import userRoutes from "./routes/user.routes.js";
 import examRoutes from "./routes/exam.routes.js";
+import questionRoutes from "./routes/question.routes.js";
 
 import connectToMongoDB from "./db/connectToMongoDB.js";
 
@@ -22,6 +23,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/exam", examRoutes);
+app.use("/api/question", questionRoutes);
 
 
 app.listen(PORT, () => {
