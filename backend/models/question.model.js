@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const questionSchema = new mongoose.Schema(
 	{
-		examname: {
+		examId: {
             type: mongoose.Schema.ObjectId,
             ref: "Exam",
             required: true
