@@ -4,6 +4,7 @@ import { csvRead } from '../helper/fileReadHelper.js';
 import csv from 'csv-parser';
 import xlsx from 'xlsx';
 import { Readable } from 'stream'; 
+import Exam from '../models/exam.model.js';
 
 export const addQuestion = async (req, res) => {
 	try {
@@ -47,6 +48,85 @@ export const addQuestion = async (req, res) => {
 		res.status(500).json({ error: "Internal Server Error" });
 	}
 };
+
+export const editQuestion = async (req, res) => {
+    try {
+        const { questionId, examId, q_title, option1, option2, option3, option4, answer } = req.body;
+
+        // Check if the question exists
+        const existingQuestion = await Question.findById({_id: questionId});
+
+        if (!existingQuestion) {
+            return res.status(404).json({ error: "Question not found" });
+        }
+
+        // Update the question fields
+        existingQuestion.examId = examId;
+        existingQuestion.q_title = q_title;
+        existingQuestion.option1 = option1;
+        existingQuestion.option2 = option2;
+        existingQuestion.option3 = option3;
+        existingQuestion.option4 = option4;
+        existingQuestion.answer = answer;
+
+        // Save the updated question
+        await existingQuestion.save();
+
+        return res.status(200).json({
+            _id: existingQuestion._id,
+            examId: existingQuestion.examId,
+            q_title: existingQuestion.q_title,
+            option1: existingQuestion.option1,
+            option2: existingQuestion.option2,
+            option3: existingQuestion.option3,
+            option4: existingQuestion.option4,
+            answer: existingQuestion.answer,
+        });
+    } catch (error) {
+        console.log("Error in exam controller", error.message);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+};
+
+export const deleteQuestion = async (req, res) => {
+    try {
+        const { questionId} = req.body;
+
+        // Check if the question exists
+        const existingQuestion = await Question.findById({_id: questionId});
+
+        if (existingQuestion) {
+            await Question.deleteOne({_id: questionId});
+            return res.status(200).json({ message: "Question deleted successfully" });
+        } else {
+            return res.status(404).json({ error: "Question not found" });
+        }
+
+    } catch (error) {
+        console.log("Error in exam controller", error.message);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+};
+
+export const deleteQuestionAll = async (req, res) => {
+    try {
+        const { examId} = req.body;
+        const exam = await Exam.findById(examId);
+        // const questions = await Question.find({ examId }).populate('examId');
+        // console.log(questions);
+
+        const result = await Question.deleteMany({ examId });
+
+        return res.status(200).json({
+            message: `Deleted ${result.deletedCount} questions for the exam ${exam.examname}`,
+        });
+
+    } catch (error) {
+        console.log("Error in exam controller", error.message);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+};
+
 
 export const addQuestionBulk = async (req, res) => {
     try {

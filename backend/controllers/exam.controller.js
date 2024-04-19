@@ -42,3 +42,90 @@ export const addExam = async (req, res) => {
 		res.status(500).json({ error: "Internal Server Error" });
 	}
 };
+
+export const editExam = async (req, res) => {
+    try {
+        const { examId, examname, duration, totalquestion, rightmark, wrongmark, examtime, examdate } = req.body;
+
+        // Check if the question exists
+        const existingExam = await Exam.findById({_id: examId});
+
+        if (!existingExam) {
+            return res.status(404).json({ error: "Exam not found" });
+        }
+
+        // Update the question fields
+        existingExam.examname = examname;
+        existingExam.duration = duration;
+        existingExam.totalquestion = totalquestion;
+        existingExam.rightmark = rightmark;
+        existingExam.wrongmark = wrongmark;
+        existingExam.examtime = examtime;
+		existingExam.examdate = examdate;
+
+        // Save the updated question
+        await existingExam.save();
+
+        return res.status(200).json({
+            _id: existingExam._id,
+            examname: existingExam.examname,
+            duration: existingExam.duration,
+            totalquestion: existingExam.totalquestion,
+            rightmark: existingExam.rightmark,
+            wrongmark: existingExam.wrongmark,
+            examtime: existingExam.examtime,
+            examdate: existingExam.examdate,
+        });
+    } catch (error) {
+        console.log("Error in exam controller", error.message);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+};
+
+export const deleteExam = async (req, res) => {
+    try {
+        const { examId} = req.body;
+
+        // Check if the question exists
+        const existingExam = await Exam.findById({_id: examId});
+
+        if (existingExam) {
+            await Exam.deleteOne({_id: examId});
+            return res.status(200).json({ message: "Exam deleted successfully" });
+        } else {
+            return res.status(404).json({ error: "Exam not found" });
+        }
+
+    } catch (error) {
+        console.log("Error in exam controller", error.message);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+};
+
+export const DeactiveExam = async (req, res) => {
+    try {
+        const { examId,status} = req.body;
+
+        // Check if the question exists
+        const existingExam = await Exam.findById({_id: examId});
+
+        if (existingExam) {
+            existingExam.status = status;
+			await existingExam.save();
+
+			if (existingExam.status === "active") {
+				return res.status(200).json({ message: "Exam Activated successfully" });
+			}
+			else{
+				return res.status(200).json({ message: "Exam Deactivated successfully" });
+			}
+            
+        } else {
+            return res.status(404).json({ error: "Exam not found" });
+        }
+
+    } catch (error) {
+        console.log("Error in exam controller", error.message);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+};

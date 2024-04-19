@@ -33,6 +33,11 @@ const examSchema = new mongoose.Schema(
 			type: Date,
             default: Date.now
 		},
+		status: {
+			type: String,
+            default: "active",
+			enum: ["active", "deactive"]
+		},
 
 		// createdAt, updatedAt => Member since <createdAt>
 	},
