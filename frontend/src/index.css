@@ -26,6 +26,7 @@
   }
   
 body {
+  min-height: 100vh;
 	background: url("/bgb.png");
 	background-repeat: no-repeat;
 	background-size: cover;

@@ -43,6 +43,26 @@ export const addExam = async (req, res) => {
 	}
 };
 
+export const getExamById = async (req, res) => {
+    try {
+        const {examId} = req.body;
+
+        // Check if the question exists
+        const existingExam = await Exam.findById({_id: examId});
+
+        if (existingExam) {
+            
+            return res.status(200).json({ result: existingExam });
+        } else {
+            return res.status(404).json({ error: "Exam not found" });
+        }
+
+    } catch (error) {
+        console.log("Error in exam controller", error.message);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+};
+
 export const editExam = async (req, res) => {
     try {
         const { examId, examname, duration, totalquestion, rightmark, wrongmark, examtime, examdate } = req.body;
