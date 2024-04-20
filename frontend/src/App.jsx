@@ -1,14 +1,22 @@
+import React from "react";
 import "./App.css";
 import Home from "./pages/home/Home";
-import Countdown from "react-countdown";
-import React, { useState,useEffect } from "react";
 import Login from "./pages/login/Login";
+import { useAuthContext } from "./context/AuthContext";
+import { Toaster } from "react-hot-toast";
+import { Routes,Route, Navigate } from 'react-router-dom'
 function App() {
+  const { authUser } = useAuthContext();
+  console.log("first",authUser);
   const  isAdmin  = true;
   return(
     <>
     <div className={isAdmin ? 'admin-background' : 'regular-background'}>
-    <Login />
+    <Routes>
+        <Route path='/'  element={authUser ? <Home /> : <Navigate to='/login' />} />
+        <Route path='/login' element={authUser ? <Navigate to='/' /> : <Login />}  />
+      </Routes>
+    <Toaster />
     </div>
     </>
 
