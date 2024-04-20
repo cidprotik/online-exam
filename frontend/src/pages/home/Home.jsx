@@ -3,6 +3,7 @@ import Countdown from "react-countdown";
 
 const Home = () => {
     const [data, setData] = useState(null);
+    const [completed, setCompleted] = useState(false);
 
     useEffect(() => {
         fetchData();
@@ -13,7 +14,7 @@ const Home = () => {
             const res = await fetch("/api/exam/getexam", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ examId: "66229c5e8fedcd74e81d9e00" }),
+                body: JSON.stringify({ examId: "66221b8fb36e4f3bdfa18d07" }),
             });
             const data = await res.json();
             setData(data.result);
@@ -31,19 +32,22 @@ const Home = () => {
 const [hours, minutes] = examTime.split(':');
 const examDateTime = new Date(examDate.getFullYear(), examDate.getMonth(), examDate.getDate(), parseInt(hours), parseInt(minutes));
 
-    console.log(examDateTime)
+const handleComplete = () => {
+    setCompleted(true);
+};
+
     return (
         <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "90vh" }}>
-            <div className="card2 radius-10 ">
+            <div className={completed ? "card2 radius-10" : "card radius-10"}>
                 <div className="p-2">
                     <div className="d-flex align-items-center justify-content-around">
                     <Countdown
     date={examDateTime}
     renderer={({ completed, formatted: { hours, minutes, seconds } }) => {
         if (completed) {
-           
+            handleComplete();
             return (
-                <button className="btn btn-success " style={{ borderWidth: "2px" }}>Start Exam</button>
+                <button className="btn btn-success " style={{ borderWidth: "2px" }}>Start</button>
             );
         } else {
             return (

@@ -1,82 +1,43 @@
+import { React,useState } from 'react';
+import useLogin from "../../hooks/useLogin";
+
 const Login = () => {
+	const [username, setUsername] = useState("");
+	const [password, setPassword] = useState("");
+	const { loading, login } = useLogin();
+
+	const handleSubmit = async (e) => {
+		
+		e.preventDefault();
+		await login(username, password);
+	};
 	return (
-		<div className='flex flex-col items-center justify-center min-w-96 mx-auto'>
-			<div className='w-full p-6 rounded-lg shadow-md bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-0'>
-				<h1 className='text-3xl font-semibold text-center text-gray-300'>
-					Login
-					<span className='text-blue-500'> ChatApp</span>
-				</h1>
-
-				<form>
-					<div>
-						<label className='label p-2'>
-							<span className='text-base label-text'>Username</span>
-						</label>
-						<input type='text' placeholder='Enter username' className='w-full input input-bordered h-10' />
+		<div class="wrapper bg-forgot">
+		<div class="authentication-forgot d-flex align-items-center justify-content-center">
+			<div class="card forgot-box" style={{width:"340px"}}>
+				<div class="card-body p-3">
+				  <form onSubmit={handleSubmit}>
+					<div class="p-4 rounded  border">
+						<div className="d-flex justify-content-center">
+							<img src="assets/images/cidlogo.png" width="120" alt="" />
+						</div>
+						<div class="my-4">
+						  <input type="text" class="form-control" placeholder="User Name" value={username} onChange={(e) => setUsername(e.target.value)}/>
+						</div>
+						<div class="my-4">
+						  <input type="password" class="form-control" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)}/>
+						</div>
+						<div class="d-grid">
+						<button type="submit" class="btn btn-white" disabled={loading}>
+							{loading ? (<span className='loading loading-spinner'></span>):<span>Login</span>}
+						</button>
+					   </div>
 					</div>
-
-					<div>
-						<label className='label'>
-							<span className='text-base label-text'>Password</span>
-						</label>
-						<input
-							type='password'
-							placeholder='Enter Password'
-							className='w-full input input-bordered h-10'
-						/>
-					</div>
-					<a href='#' className='text-sm  hover:underline hover:text-blue-600 mt-2 inline-block'>
-						{"Don't"} have an account?
-					</a>
-
-					<div>
-						<button className='btn btn-block btn-sm mt-2'>Login</button>
-					</div>
-				</form>
+				  </form>
+				</div>
 			</div>
 		</div>
+	</div>
 	);
 };
 export default Login;
-
-// STARTER CODE FOR THIS FILE
-// const Login = () => {
-// 	return (
-// 		<div className='flex flex-col items-center justify-center min-w-96 mx-auto'>
-// 			<div className='w-full p-6 rounded-lg shadow-md bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-0'>
-// 				<h1 className='text-3xl font-semibold text-center text-gray-300'>
-// 					Login
-// 					<span className='text-blue-500'> ChatApp</span>
-// 				</h1>
-
-// 				<form>
-// 					<div>
-// 						<label className='label p-2'>
-// 							<span className='text-base label-text'>Username</span>
-// 						</label>
-// 						<input type='text' placeholder='Enter username' className='w-full input input-bordered h-10' />
-// 					</div>
-
-// 					<div>
-// 						<label className='label'>
-// 							<span className='text-base label-text'>Password</span>
-// 						</label>
-// 						<input
-// 							type='password'
-// 							placeholder='Enter Password'
-// 							className='w-full input input-bordered h-10'
-// 						/>
-// 					</div>
-// 					<a href='#' className='text-sm  hover:underline hover:text-blue-600 mt-2 inline-block'>
-// 						{"Don't"} have an account?
-// 					</a>
-
-// 					<div>
-// 						<button className='btn btn-block btn-sm mt-2'>Login</button>
-// 					</div>
-// 				</form>
-// 			</div>
-// 		</div>
-// 	);
-// };
-// export default Login;

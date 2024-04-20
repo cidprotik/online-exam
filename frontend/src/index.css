@@ -19,13 +19,6 @@
 
 
 #root {
-    /* max-width: 1280px; */
-    margin: 0 auto;
-    padding: 3rem;
-    text-align: center;
-  }
-  
-body {
   min-height: 100vh;
 	background: url("/bgb.png");
 	background-repeat: no-repeat;
@@ -37,8 +30,16 @@ body {
   -moz-user-select: none; /* Firefox */
   -ms-user-select: none; /* Internet Explorer/Edge */
   user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, and Opera */
+  }
+  
+
+.admin-background {
+  background-color: #f0f0f0 !important; /* Or any other color you prefer for admin background */
+  background-size: cover;
+  min-height: 100vh;
 }
-.card-body2{
+
+.card-body{
 	padding: 0 1rem;
 }
 .question-numberboard {
