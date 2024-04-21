@@ -5,6 +5,7 @@ import Login from "./pages/login/Login";
 import { useAuthContext } from "./context/AuthContext";
 import { Toaster } from "react-hot-toast";
 import { Routes,Route, Navigate } from 'react-router-dom'
+import Start from "./pages/home/Start";
 function App() {
   const { authUser } = useAuthContext();
   console.log("first",authUser);
@@ -13,7 +14,7 @@ function App() {
     <>
     <div className={isAdmin ? 'admin-background' : 'regular-background'}>
     <Routes>
-        <Route path='/'  element={authUser ? <Home /> : <Navigate to='/login' />} />
+        <Route path='/'  element={authUser ? <Start /> : <Navigate to='/login' />} />
         <Route path='/login' element={authUser ? <Navigate to='/' /> : <Login />}  />
       </Routes>
     <Toaster />

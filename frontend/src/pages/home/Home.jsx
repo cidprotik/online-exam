@@ -14,7 +14,7 @@ const Home = () => {
             const res = await fetch("/api/exam/getexam", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ examId: "66221b8fb36e4f3bdfa18d07" }),
+                body: JSON.stringify({ examId: "66229c5e8fedcd74e81d9e00" }),
             });
             const data = await res.json();
             setData(data.result);
