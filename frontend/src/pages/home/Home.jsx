@@ -1,15 +1,13 @@
 import { useEffect, useState } from "react";
 import Countdown from "react-countdown";
 import useExamStore from "../../zustand/useExamStore";
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
   const [data, setData] = useState(null);
   const [completed, setCompleted] = useState(false);
   const { selectedExam } = useExamStore();
-//   useEffect(() => {
-    
-//   }, []);
-
+  const navigate = useNavigate();
 
   if (!selectedExam) {
     return (
@@ -32,6 +30,10 @@ const Home = () => {
 
   const handleComplete = () => {
     setCompleted(true);
+  };
+
+  const handleStartExam = () => {
+    navigate('/exam'); // Navigate to the new component's path
   };
 
   return (
@@ -78,10 +80,10 @@ const Home = () => {
                             handleComplete();
                             return (
                                 <button
-                                className="btn btn-sm btn-success mb-2"
-                                style={{ borderWidth: '2px' }}
+                                className="btn btn-sm btn-danger text-white mb-2 blinking-button"
+                                style={{ borderWidth: '2px' }} disabled
                                 >
-                                Start
+                                Now You Can Start Your Exam 
                                 </button>
                             );
                             } else {
@@ -118,7 +120,7 @@ const Home = () => {
                   </div>
                 </div>
               </div>
-<div  style={{maxHeight:"520px",overflowY: 'auto', marginTop:"70px",border: "1px solid #ccc", // Simple gray border
+<div  style={{maxHeight:"68vh",overflowY: 'auto', marginTop:"70px",border: "1px solid #ccc", // Simple gray border
     borderRadius: "10px", // Optional: adds rounded corners
     padding: "10px", } }>      
         <p className="h2">
@@ -148,8 +150,11 @@ const Home = () => {
           paddingTop:'15px',
         }}
       >
+        
+        <span className={completed ? 'starttime ' : ' '} style={{fontSize:"20px",fontWeight:"bolder", marginTop:"2px"}}>Exam Will Start In :  </span>
+
       <div className={completed ? 'card2 radius-10' : 'card radius-10'} >
-        <div className="px-4 py-2">
+        <div className="px-4 ">
           <div className="d-flex  justify-content-around">
             <Countdown
               date={examDateTime}
@@ -163,17 +168,21 @@ const Home = () => {
                     <button
                       className="btn btn-sm btn-success mb-2"
                       style={{ borderWidth: '2px' }}
+                      onClick={handleStartExam}
                     >
                       Start
                     </button>
                   );
                 } else {
                   return (
+                  
+                    
                     <span className="countdown">
                       {hours > 0 ? `${hours}:` : ''}
                       {minutes < 10 ? `${minutes}` : minutes}:
                       {seconds < 10 ? `${seconds}` : seconds}
                     </span>
+                  
                   );
                 }
               }}

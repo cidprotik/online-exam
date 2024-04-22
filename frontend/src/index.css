@@ -36,7 +36,6 @@
   .wrapper{
     margin: 0 auto;
     padding: 3rem;
-    text-align: center;
   }
   
 
@@ -53,6 +52,7 @@
 .card-body2{
 	padding: 0 1rem;
 }
+
 .question-numberboard {
   display: flex;
   flex-wrap: wrap;
@@ -77,12 +77,16 @@ bottom: 0;
 left:0;
 }
 
-.scrollable-container {
-max-height: 300px; /* Maximum height before scrolling */
-overflow: auto; /* Enable scrolling */
-display: flex;
-flex-wrap: wrap;
+.starttime{
+  display: none;
 }
+
+.scrollable-container {
+	max-height: 300px; /* Maximum height before scrolling */
+	overflow: auto; /* Enable scrolling */
+	display: flex;
+	flex-wrap: wrap;
+  }
 
 
 /* dark mode looking scrollbar */
@@ -155,4 +159,18 @@ border-width: 2.5px!important;
 	background-clip: border-box;
 	border: 1px solid rgba(0, 0, 0, .125);
 	border-radius: .25rem
+}
+
+/* css start for blinking button in start exam */
+@keyframes blink {
+  0%, 100% {
+      opacity: 1;
+  }
+  50% {
+      opacity: 0;
+  }
+}
+
+.blinking-button {
+  animation: blink 1s infinite; /* Blink every second */
 }
