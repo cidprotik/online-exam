@@ -16,6 +16,7 @@ function App() {
     <Routes>
         <Route path='/'  element={authUser ? <Start /> : <Navigate to='/login' />} />
         <Route path='/login' element={authUser ? <Navigate to='/' /> : <Login />}  />
+        <Route path='/instraction' element={authUser ? <Home /> : <Navigate to='/login' />}  />
       </Routes>
     <Toaster />
     </div>
