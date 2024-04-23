@@ -38,7 +38,7 @@ const Home = () => {
 
   return (
     <div>
-    <div >
+    <div className="bg-white" style={{height:"100vh"}}>
     <div className="wrapper">
         <div className="page-wrapper">
     <div className="card radius-10 border-start  border-info " style={{

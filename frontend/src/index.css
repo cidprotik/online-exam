@@ -45,9 +45,9 @@
   min-height: 100vh;
 }
 
-.card-body{
+/* .card-body{
 	padding: 0 1rem;
-}
+} */
 
 .card-body2{
 	padding: 0 1rem;
@@ -174,3 +174,5 @@ border-width: 2.5px!important;
 .blinking-button {
   animation: blink 1s infinite; /* Blink every second */
 }
+
+/* css end for blinking button in start exam */

@@ -16,3 +16,12 @@ const useExamStore = create((set) => ({
 }));
 
 export default useExamStore;
+
+// import create from 'zustand';
+
+// const useExamStore = create((set) => ({
+//   selectedExam: null, // initially, no exam is selected
+//   setExam: (exam) => set({ selectedExam: exam }), // function to set the selected exam
+// }));
+
+// export default useExamStore;
