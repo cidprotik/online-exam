@@ -3,18 +3,9 @@ import React, { useState,useEffect } from "react";
 
 import ExamHeader from "../../components/exam/ExamHeader";
 import QuestionSection from "../../components/exam/QuestionSection";
+import SideButton from "../../components/exam/SideButton";
 function Exam() {
-  const boxes = [];
-
-  // Generate 20 boxes
-  for (let i = 1; i <= 100; i++) {
-    boxes.push(
-      <div key={i} className="box rounded bg-secondary">
-        {i}
-        <div className="inner-box rounded"></div>
-      </div>
-    );
-  }
+  
   
 
   return (
@@ -25,7 +16,7 @@ function Exam() {
           {/*end row*/}
           <div className="row">
             <QuestionSection />
-            
+            <SideButton />
           </div>
           {/*end row*/}
         </div>

@@ -1,6 +1,18 @@
 import React from 'react'
 
 const SideButton = () => {
+  const boxes = [];
+
+  // Generate 20 boxes
+  for (let i = 1; i <= 100; i++) {
+    boxes.push(
+      <div key={i} className="box rounded bg-secondary">
+        {i}
+        <div className="inner-box rounded"></div>
+      </div>
+    );
+  }
+  
   return (
     <div className="col-12 col-lg-4">
               <div className="card radius-10">

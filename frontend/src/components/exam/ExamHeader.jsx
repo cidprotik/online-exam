@@ -1,50 +1,60 @@
 import React, { useState } from 'react';
 import Countdown from 'react-countdown';
 import useExamStore from '../../zustand/useExamStore';
+import ExamEndModal from '../modal/ExamEndModal';
+import { useAuthContext } from "./../../context/AuthContext";
+import useLogout from '../../hooks/useLogout';
 
 const ExamHeader = () => {
+  const {loading, logout} = useLogout();
+  const { authUser } = useAuthContext();
   const { selectedExam } = useExamStore();
   const duration = selectedExam.duration * 60 * 1000; // 50 minutes in milliseconds
 
   const countdownEndKey = 'countdownEndTime';
-
   const currentTime = Date.now(); // Current time in milliseconds
   let endTime = localStorage.getItem(countdownEndKey);
 
+  const [isExamEnded, setIsExamEnded] = useState(currentTime >= endTime);
+
   if (!endTime) {
-    // If there's no stored end time, set a new one
     endTime = currentTime + duration;
     localStorage.setItem(countdownEndKey, endTime);
   } else {
     endTime = parseInt(endTime);
   }
-  const [showModal, setShowModal] = useState(false);
-  
-  if (currentTime >= endTime) {
-    setShowModal(true);
-  }
+
+  const onCountdownComplete = () => {
+    setIsExamEnded(true);
+  };
 
   return (
     <>
+    <ExamEndModal
+        isOpen={isExamEnded}
+        onClose={() => setIsExamEnded(false)}
+        message="The exam has ended."
+      />
     <div className="row">
       <div className="col">
         <div className="card radius-10 border-start border-info">
           <div className="p-2">
             <div className="d-flex align-items-center justify-content-between">
               <div className="d-flex align-items-center">
-                <img
-                  src="assets/images/avatars/avatar-2.png"
-                  className="user-img"
+                <img 
+                  src="assets/images/cidlogo.png"
+                  className="user-img bg-white p-1"
                   alt="user avatar"
                 />
                 <div className="user-info ps-3">
-                  <p className="user-name mb-0">Pauline Seitz</p>
-                  <p className="designation mb-0">Web Designer</p>
+                  <p className="user-name mb-0">CID</p>
+                  <p className="designation mb-0">West Bengal</p>
                 </div>
               </div>
               <div>
                 <Countdown
                   date={endTime} // Use the stored end time
+                  onComplete={onCountdownComplete}
                   renderer={({ hours, minutes, seconds }) => (
                     <span className="countdown text-2xl">
                       {hours > 0 ? `${hours}:` : ''}
@@ -54,39 +64,28 @@ const ExamHeader = () => {
                   )}
                 />
               </div>
-              <div className="d-flex align-items-center">
+              <a className="d-flex align-items-center" role="button" data-bs-toggle="dropdown">
                 <img
                   src="assets/images/avatars/avatar-2.png"
                   className="user-img"
                   alt="user avatar"
                 />
                 <div className="user-info ps-3">
-                  <p className="user-name mb-0">Pauline Seitz</p>
-                  <p className="designation mb-0">Web Designer</p>
+                  <p className="user-name mb-0">{authUser.fullName}</p>
+                  <p className="mb-0  hover:text-green-500">{authUser.username}</p>
                 </div>
-              </div>
+              </a>
+              <ul className="dropdown-menu dropdown-menu-end">
+              {!loading ? (<>
+							<li className='cursor-pointer'><a className="dropdown-item" onClick={logout}><i className='bx bx-log-out-circle'></i><span className='ml-4'>Logout</span></a>
+							</li>
+              </>) : (<span className='loading loading-spinner'>Loading...</span>)}
+						</ul>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <Modal show={showModal} onHide={() => setShowModal(false)}>
-    <Modal.Header closeButton>
-      <Modal.Title>Submit Your Exam</Modal.Title>
-    </Modal.Header>
-    <Modal.Body>Time's up! Would you like to submit your exam?</Modal.Body>
-    <Modal.Footer>
-      <Button variant="secondary" onClick={() => setShowModal(false)}>
-        Cancel
-      </Button>
-      <Button variant="primary" onClick={() => {
-        // Handle exam submission logic here
-        setShowModal(false); // Close modal after submitting
-      }}>
-        Submit Exam
-      </Button>
-    </Modal.Footer>
-  </Modal>
   </>
   );
 };
