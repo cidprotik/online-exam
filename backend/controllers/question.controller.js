@@ -88,6 +88,24 @@ export const editQuestion = async (req, res) => {
     }
 };
 
+export const getQuestionAll = async (req, res) => {
+    try {
+        const {examId} = req.body;
+
+        const existingExams = await Question.find({ examId });
+
+        if (existingExams && existingExams.length > 0) {
+            return res.status(200).json({ result: existingExams });
+        } else {
+            return res.status(404).json({ error: "No Questions found" });
+        }
+
+    } catch (error) {
+        console.error("Error in Question controller:", error.message);
+        return res.status(500).json({ error: "Internal Server Error" });
+    }
+};
+
 export const deleteQuestion = async (req, res) => {
     try {
         const { questionId} = req.body;

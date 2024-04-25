@@ -1,7 +1,10 @@
 import React,{ useState,useEffect } from 'react'
 import screenfull from 'screenfull';
+import useGetAllQuestion from '../../hooks/useGetAllQuestion';
 
 const QuestionSection = () => {
+  const { getallquestion, loading } = useGetAllQuestion();
+  const [questions, setQuestions] = useState([]);
 
   const [contentOverflow, setContentOverflow] = useState(false);
   useEffect(() => {
@@ -12,6 +15,18 @@ const QuestionSection = () => {
       setContentOverflow(false);
     }
   }, []);
+
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      const data = await getallquestion();
+      console.log(data) // Fetch the questions
+      if (data) {
+        setQuestions(data.result); // Update the state with the fetched data
+      }
+    };
+
+    fetchQuestions(); // Call the fetching function
+  }, []); 
 
 
   const [selectedOption, setSelectedOption] = useState(null);
