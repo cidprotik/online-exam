@@ -35,7 +35,7 @@ const useGetAllQuestion = () => {
         if (examId) {
             getallquestion();
         }
-    }, [examId]); // add examId to dependency array
+    }, []); // add examId to dependency array
 
     return { getallquestion, loading };
 };
