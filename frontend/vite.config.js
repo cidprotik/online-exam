@@ -9,6 +9,7 @@ export default defineConfig({
     proxy: {
       '/api': {
         target: 'http://localhost:3008', // Make sure your backend server is running on this port
+        changeOrigin: true,
         // ^ This should point to the base URL of your backend API
       },
     }
