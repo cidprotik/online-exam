@@ -1,17 +1,26 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import useGetAllQuestion from '../../hooks/useGetAllQuestion';
 
-const SideButton = () => {
-  const boxes = [];
+const SideButton = ({ onSidebarClick }) => {
 
-  // Generate 20 boxes
-  for (let i = 1; i <= 100; i++) {
-    boxes.push(
-      <div key={i} className="box rounded bg-secondary">
-        {i}
-        <div className="inner-box rounded"></div>
-      </div>
-    );
-  }
+  const { getallquestion, loading } = useGetAllQuestion();
+  const [questions, setQuestions] = useState([]);
+
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      const data = await getallquestion();
+      if (data) {
+        setQuestions(data.result);
+      }
+    };
+
+    fetchQuestions(); // Call the fetching function once when component mounts
+  }, []);
+
+  const handleBoxClick = (index) => {
+    console.log(index)
+    onSidebarClick(index); // Call the parent callback function
+  };
   
   return (
     <div className="col-12 col-lg-4">
@@ -74,7 +83,14 @@ const SideButton = () => {
                       className="question-numberboard text-center"
                       style={{ margin: "2rem -1.2rem 1rem -2px" }}
                     >
-                      <div className="scrollable-container">{boxes}</div>
+                      {questions.map((_, index) => (
+        <div key={index} class="scrollable-container">
+          <div class="box rounded bg-secondary cursor-pointer" onClick={() => handleBoxClick(index + 1)}>{index+1}
+            <div class="inner-box rounded">
+            </div>
+          </div>
+        </div>
+      ))}
                     </div>
                   </div>
                 </div>

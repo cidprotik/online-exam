@@ -3,11 +3,13 @@ import screenfull from 'screenfull';
 import useGetAllQuestion from '../../hooks/useGetAllQuestion';
 import useSubmitAnswer from '../../hooks/useSubmitAnswer';
 
-const QuestionSection = () => {
-  const { getallquestion, loading } = useGetAllQuestion();
+
+const QuestionSection = ({ currentQuestionIndex }) => {
+  const { getallquestion } = useGetAllQuestion();
   const [questions, setQuestions] = useState([]);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [contentOverflow, setContentOverflow] = useState(false);
   const { sendAnswer } = useSubmitAnswer();
+  const [selectedOption, setSelectedOption] = useState(null);
 
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -17,91 +19,58 @@ const QuestionSection = () => {
       }
     };
 
-    fetchQuestions(); // Call the fetching function once when component mounts
+    fetchQuestions();
   }, []);
 
-  const [contentOverflow, setContentOverflow] = useState(false);
-  
+  // Check if content overflows to toggle scrolling
   useEffect(() => {
     const cardBody = document.querySelector('.card-body2');
-  
-    if (cardBody.scrollHeight > cardBody.clientHeight) {
+
+    if (cardBody && cardBody.scrollHeight > cardBody.clientHeight) {
       setContentOverflow(true);
     } else {
       setContentOverflow(false);
     }
   }, [currentQuestionIndex, questions]);
 
-  const [selectedOption, setSelectedOption] = useState(null);
-
-
-  // const postAnswerToAPI = async (data) => {
-  //   try {
-  //     const response = await fetch('/api/submit-answer', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify(data),
-  //     });
-
-  //     if (!response.ok) {
-  //       throw new Error('Failed to submit the answer');
-  //     }
-  //   } catch (error) {
-  //     console.error('Error posting to API:', error);
-  //     alert('An error occurred while submitting your answer. Please try again.');
-  //   }
-  // };
-
-
   const handleChange = (optionId) => {
     setSelectedOption(optionId);
+
+    // Reset label styles and highlight the selected one
     const selectedLabel = document.querySelector(`label[for=${optionId}]`);
 
-    document.querySelectorAll(".radio-options label").forEach((label) => {
-      label.classList.remove("labelselected");
-      label.querySelector("span").style.backgroundColor = "#4b525a";
-      label.style.color = "#333";
-      label.style.borderColor = "#ccc";
+    document.querySelectorAll('.radio-options label').forEach((label) => {
+      label.classList.remove('labelselected');
+      label.querySelector('span').style.backgroundColor = '#4b525a';
+      label.style.color = '#333';
+      label.style.borderColor = '#ccc';
     });
 
-    selectedLabel.classList.add("labelselected");
-    selectedLabel.querySelector("span").style.backgroundColor = "#08fb0c";
-    selectedLabel.style.color = "#08fb0c";
+    selectedLabel.classList.add('labelselected');
+    selectedLabel.querySelector('span').style.backgroundColor = '#08fb0c';
+    selectedLabel.style.color = '#08fb0c';
   };
 
   const handleNextQuestion = async () => {
-    if (currentQuestionIndex < questions.length - 1) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
-      setSelectedOption(null); // Clear the selected option for the next question
-      
+    const currentQuestion = questions[currentQuestionIndex]; // Get the current question
+ console.log("sect",currentQuestion)
+    if (currentQuestion && selectedOption) {
       const apiData = {
-        questionId: questions[currentQuestionIndex]._id,
+        questionId: currentQuestion._id,
         answer: selectedOption,
       };
 
-      if(apiData.answer)
-      {
-        await sendAnswer(apiData);
-      }
-
-      document.querySelectorAll(".radio-options label").forEach((label) => {
-        label.classList.remove("labelselected");
-        label.querySelector("span").style.backgroundColor = "#4b525a"; // Original background color
-        label.style.color = "#333"; // Original text color
-        label.style.borderColor = "#ccc"; // Original border color
-      });
-
+      await sendAnswer(apiData); // Save the answer
     }
   };
 
   const handlePreviousQuestion = () => {
     if (currentQuestionIndex > 0) {
-      setCurrentQuestionIndex(currentQuestionIndex - 1);
+      
       setSelectedOption(null); // Clear the selected option for the previous question
     }
   };
+
 
   const handleFullscreenToggle = () => {
     if (screenfull.isEnabled) {
@@ -113,7 +82,7 @@ const QuestionSection = () => {
     }
   };
 
-  const currentQuestion = questions[currentQuestionIndex]; // Get the current question
+  const currentQuestion = questions[currentQuestionIndex];
 
   return (
     <div className="col-12 col-lg-8">

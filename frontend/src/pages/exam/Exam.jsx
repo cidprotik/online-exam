@@ -6,7 +6,12 @@ import QuestionSection from "../../components/exam/QuestionSection";
 import SideButton from "../../components/exam/SideButton";
 function Exam() {
   
-  
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+
+  // This function updates the current question index
+  const handleSidebarClick = (index) => {
+    setCurrentQuestionIndex(index - 1); // Subtract 1 because index is 1-based
+  };  
 
   return (
     <>
@@ -15,8 +20,8 @@ function Exam() {
           <ExamHeader />
           {/*end row*/}
           <div className="row">
-            <QuestionSection />
-            <SideButton />
+            <QuestionSection currentQuestionIndex={currentQuestionIndex} />
+            <SideButton onSidebarClick={handleSidebarClick} />
           </div>
           {/*end row*/}
         </div>
