@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import useGetAllQuestion from '../../hooks/useGetAllQuestion';
+import useAnswerStore from '../../zustand/useAnswerStore';
 
 const SideButton = ({ onSidebarClick }) => {
-
+  const { answeredQuestions,unansweredQuestions } = useAnswerStore();
   const { getallquestion, loading } = useGetAllQuestion();
   const [questions, setQuestions] = useState([]);
 
@@ -85,9 +86,17 @@ const SideButton = ({ onSidebarClick }) => {
                     >
                       {questions.map((_, index) => (
         <div key={index} class="scrollable-container">
-          <div class="box rounded bg-secondary cursor-pointer" onClick={() => handleBoxClick(index + 1)}>{index+1}
-            <div class="inner-box rounded">
-            </div>
+          <div
+            className={`box rounded cursor-pointer ${
+              answeredQuestions.includes(index)
+                ? 'bg-success' // Green for answered
+                : unansweredQuestions.includes(index)
+                ? 'bg-danger' // Red for unanswered
+                : 'bg-secondary' // Default gray for not attempted
+            }`}
+            onClick={() => onSidebarClick(index + 1)}
+          >
+            {index + 1}
           </div>
         </div>
       ))}

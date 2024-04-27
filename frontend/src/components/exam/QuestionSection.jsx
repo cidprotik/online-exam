@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import screenfull from 'screenfull';
 import useGetAllQuestion from '../../hooks/useGetAllQuestion';
 import useSubmitAnswer from '../../hooks/useSubmitAnswer';
+import useAnswerStore from '../../zustand/useAnswerStore';
 
 
-const QuestionSection = ({ currentQuestionIndex }) => {
+const QuestionSection = ({ currentQuestionIndex, setQuestionIndex  }) => {
+  const { addAnsweredQuestion,addUnansweredQuestion,removeAnsweredQuestion  } = useAnswerStore();
   const { getallquestion } = useGetAllQuestion();
   const [questions, setQuestions] = useState([]);
   const [contentOverflow, setContentOverflow] = useState(false);
@@ -35,25 +37,17 @@ const QuestionSection = ({ currentQuestionIndex }) => {
 
   const handleChange = (optionId) => {
     setSelectedOption(optionId);
+  };
 
-    // Reset label styles and highlight the selected one
-    const selectedLabel = document.querySelector(`label[for=${optionId}]`);
-
-    document.querySelectorAll('.radio-options label').forEach((label) => {
-      label.classList.remove('labelselected');
-      label.querySelector('span').style.backgroundColor = '#4b525a';
-      label.style.color = '#333';
-      label.style.borderColor = '#ccc';
-    });
-
-    selectedLabel.classList.add('labelselected');
-    selectedLabel.querySelector('span').style.backgroundColor = '#08fb0c';
-    selectedLabel.style.color = '#08fb0c';
+  const handleClearResponse = () => {
+    setSelectedOption(null); // Reset selected option
+    addUnansweredQuestion(currentQuestionIndex); // Mark as unanswered
+    removeAnsweredQuestion(currentQuestionIndex); // Remove from answered list
   };
 
   const handleNextQuestion = async () => {
     const currentQuestion = questions[currentQuestionIndex]; // Get the current question
- console.log("sect",currentQuestion)
+
     if (currentQuestion && selectedOption) {
       const apiData = {
         questionId: currentQuestion._id,
@@ -61,12 +55,21 @@ const QuestionSection = ({ currentQuestionIndex }) => {
       };
 
       await sendAnswer(apiData); // Save the answer
+      addAnsweredQuestion(currentQuestionIndex);
+      setSelectedOption(null);
     }
+    else{
+      addUnansweredQuestion(currentQuestionIndex);
+    }
+
+    if (currentQuestionIndex < questions.length) {
+      setQuestionIndex(currentQuestionIndex + 1);
+      }
   };
 
   const handlePreviousQuestion = () => {
     if (currentQuestionIndex > 0) {
-      
+      setQuestionIndex(currentQuestionIndex - 1);
       setSelectedOption(null); // Clear the selected option for the previous question
     }
   };
@@ -125,7 +128,7 @@ const QuestionSection = ({ currentQuestionIndex }) => {
                           checked={selectedOption === "option1"}
                           onChange={() => handleChange("option1")}
                         />
-                        <span>A</span>&nbsp;{currentQuestion.option1}
+                        <span className={selectedOption === "option1" ? "selectspan" : ""}>A</span>&nbsp;<text className={selectedOption === "option1" ? "text-white" : ""}>{currentQuestion.option1}</text>
                       </label>
 
                       <label
@@ -141,7 +144,7 @@ const QuestionSection = ({ currentQuestionIndex }) => {
                           checked={selectedOption === "option2"}
                           onChange={() => handleChange("option2")}
                         />
-                        <span>B</span>&nbsp; {currentQuestion.option2}
+                        <span className={selectedOption === "option2" ? "selectspan" : ""}>B</span>&nbsp; <text className={selectedOption === "option2" ? "text-white" : ""}>{currentQuestion.option2}</text>
                       </label>
 
                       <label
@@ -157,7 +160,8 @@ const QuestionSection = ({ currentQuestionIndex }) => {
                           checked={selectedOption === "option3"}
                           onChange={() => handleChange("option3")}
                         />
-                        <span>C</span>&nbsp;{currentQuestion.option3}
+                        <span className={selectedOption === "option3" ? "selectspan" : ""}>C</span>&nbsp;
+                        <text className={selectedOption === "option3" ? "text-white" : ""}>{currentQuestion.option3}</text>
                       </label>
 
                       <label
@@ -173,7 +177,7 @@ const QuestionSection = ({ currentQuestionIndex }) => {
                           checked={selectedOption === "option4"}
                           onChange={() => handleChange("option4")}
                         />
-                        <span>D</span>&nbsp;{currentQuestion.option4}
+                        <span className={selectedOption === "option4" ? "selectspan" : ""}>D</span>&nbsp;<text className={selectedOption === "option4" ? "text-white" : ""}>{currentQuestion.option4}</text>
                       </label>
       </div>
       <div
@@ -203,7 +207,7 @@ const QuestionSection = ({ currentQuestionIndex }) => {
                       </div>
                       <div class="col">
                         <div class="p-3">
-                          <button className="btn btn-sm">Clear Response</button>
+                          <button className="btn btn-sm" onClick={handleClearResponse}>Clear Response</button>
                           <button onClick={handleFullscreenToggle}>Toggle Fullscreen</button>
                         </div>
                       </div>

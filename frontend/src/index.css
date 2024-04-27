@@ -148,6 +148,9 @@ background-color: #6e7c81!important;
 border-color: #08fb0c!important;
 border-width: 2.5px!important;
 }
+.selectspan{
+  background-color: #08fb0c!important;
+}
 
 .logincard {
 	position: relative;
