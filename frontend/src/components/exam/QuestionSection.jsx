@@ -3,6 +3,7 @@ import screenfull from 'screenfull';
 import useGetAllQuestion from '../../hooks/useGetAllQuestion';
 import useSubmitAnswer from '../../hooks/useSubmitAnswer';
 import useAnswerStore from '../../zustand/useAnswerStore';
+import { saveUserProgress } from '../../hooks/useUserProgress';
 
 
 const QuestionSection = ({ currentQuestionIndex, setQuestionIndex  }) => {
@@ -12,6 +13,7 @@ const QuestionSection = ({ currentQuestionIndex, setQuestionIndex  }) => {
   const [contentOverflow, setContentOverflow] = useState(false);
   const { sendAnswer } = useSubmitAnswer();
   const [selectedOption, setSelectedOption] = useState(null);
+  const { saveProgress } = saveUserProgress();
 
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -47,7 +49,6 @@ const QuestionSection = ({ currentQuestionIndex, setQuestionIndex  }) => {
 
   const handleNextQuestion = async () => {
     const currentQuestion = questions[currentQuestionIndex]; // Get the current question
-
     if (currentQuestion && selectedOption) {
       const apiData = {
         questionId: currentQuestion._id,
@@ -55,6 +56,14 @@ const QuestionSection = ({ currentQuestionIndex, setQuestionIndex  }) => {
       };
 
       await sendAnswer(apiData); // Save the answer
+
+      const progressData ={
+        answeredQuestions: useAnswerStore.getState().answeredQuestions,
+        unansweredQuestions: useAnswerStore.getState().unansweredQuestions,
+      }
+
+      await saveProgress(progressData);
+
       addAnsweredQuestion(currentQuestionIndex);
       setSelectedOption(null);
     }
@@ -62,7 +71,7 @@ const QuestionSection = ({ currentQuestionIndex, setQuestionIndex  }) => {
       addUnansweredQuestion(currentQuestionIndex);
     }
 
-    if (currentQuestionIndex < questions.length) {
+    if (currentQuestionIndex < questions.length-1) {
       setQuestionIndex(currentQuestionIndex + 1);
       }
   };

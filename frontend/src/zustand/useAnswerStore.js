@@ -2,12 +2,11 @@ import create from 'zustand';
 import { persist } from 'zustand/middleware';
 
 // Create a global store using Zustand with persistence
-const useExamStore = create(
+const useAnswerStore = create(
   persist(
     (set) => ({
       answeredQuestions: [], // List of answered questions
       unansweredQuestions: [], // List of unanswered questions
-      // Function to add answered questions
       addAnsweredQuestion: (index) => {
         set((state) => {
           if (!state.answeredQuestions.includes(index)) {
@@ -16,7 +15,6 @@ const useExamStore = create(
           return state;
         });
       },
-      // Function to add unanswered questions
       addUnansweredQuestion: (index) => {
         set((state) => {
           if (!state.unansweredQuestions.includes(index)) {
@@ -25,19 +23,19 @@ const useExamStore = create(
           return state;
         });
       },
-      // Function to remove answered questions
-      removeAnsweredQuestion: (index) => {
-        set((state) => {
-          const updatedAnswers = state.answeredQuestions.filter((i) => i !== index);
-          return { answeredQuestions: updatedAnswers };
-        });
+      // Functions to set state directly (if needed)
+      setAnsweredQuestions: (questions) => {
+        set({ answeredQuestions: questions });
+      },
+      setUnansweredQuestions: (questions) => {
+        set({ unansweredQuestions: questions });
       },
     }),
     {
-      name: 'exam-questions-state', // Storage name
+      name: 'exam-progress', // Name for persistence in localStorage
       getStorage: () => localStorage, // Use localStorage for persistence
     }
   )
 );
 
-export default useExamStore;
+export default useAnswerStore;

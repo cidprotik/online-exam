@@ -4,7 +4,7 @@ import cookieParser from "cookie-parser";
 
 import authRoutes from "./routes/auth.routes.js";
 import messageRoutes from "./routes/message.routes.js";
-import userRoutes from "./routes/user.routes.js";
+import userProgress from "./routes/user.routes.js";
 import examRoutes from "./routes/exam.routes.js";
 import questionRoutes from "./routes/question.routes.js";
 import answerRoutes from "./routes/answer.routes.js";
@@ -22,10 +22,11 @@ app.use(cookieParser());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
-app.use("/api/users", userRoutes);
+app.use("/api/userprogress", userProgress);
 app.use("/api/exam", examRoutes);
 app.use("/api/question", questionRoutes);
 app.use("/api/answer", answerRoutes);
+
 
 
 app.listen(PORT, () => {
