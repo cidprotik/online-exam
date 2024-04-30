@@ -66,20 +66,28 @@ export const getExamById = async (req, res) => {
 
 export const getExamAll = async (req, res) => {
     try {
-        // Fetch all exams with status 'active'
-        const existingExams = await Exam.find({ status: "active" });
+        const status = req.body; // Access specific property
+        let existingExams; // Declare outside the if-else block
+        console.log(status);
+        if (status) {
+            existingExams = await Exam.find(status);
+            console.log("1st",existingExams) // Assign the result to the outer variable
+        } else {
+            existingExams = await Exam.find({}); // Assign the result to the outer variable
+            console.log("2nd",existingExams)
+        }
 
         if (existingExams && existingExams.length > 0) {
             return res.status(200).json({ result: existingExams });
         } else {
             return res.status(404).json({ error: "No active exams found" });
         }
-
     } catch (error) {
         console.error("Error in exam controller:", error.message);
         return res.status(500).json({ error: "Internal Server Error" });
     }
 };
+
 
 
 export const editExam = async (req, res) => {

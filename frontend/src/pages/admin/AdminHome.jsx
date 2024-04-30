@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import StartComponent from "../../components/home/startComponent";
 
-const Start = () => {
+const AdminHome = () => {
   const [data, setData] = useState(null);
 
   useEffect(() => {
@@ -13,7 +13,6 @@ const Start = () => {
       const res = await fetch("/api/exam/getexamall", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify( {status:"active"} ),
       });
       const data = await res.json();
       setData(data.result);
@@ -27,7 +26,7 @@ const Start = () => {
   }
 
   return (
-    <div className="wrapper bg-forgot">
+    <div className="wrapper bg-forgot" >
       <div className="page-wrapper">
       <div className="d-flex justify-content-around align-items-center flex-wrap mt-10">
       {data.map((exam, index) => (
@@ -43,4 +42,4 @@ const Start = () => {
   );
 };
 
-export default Start;
+export default AdminHome;

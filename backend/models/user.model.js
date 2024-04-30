@@ -25,6 +25,11 @@ const userSchema = new mongoose.Schema(
 			type: String,
 			length: 10,
 		},
+		userType: {
+			type: String,
+			default :"student",
+			enum: ["student", "admin","superadmin"],
+		},
 		// createdAt, updatedAt => Member since <createdAt>
 	},
 	{ timestamps: true }
