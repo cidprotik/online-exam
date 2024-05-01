@@ -7,12 +7,16 @@ import { saveUserProgress } from '../../hooks/useUserProgress';
 
 
 const QuestionSection = ({ currentQuestionIndex, setQuestionIndex  }) => {
-  const { addAnsweredQuestion,addUnansweredQuestion,removeAnsweredQuestion  } = useAnswerStore();
+  const {setSelectedOption,
+    getSelectedOption,clearSelectedOption, addAnsweredQuestion,addUnansweredQuestion,removeAnsweredQuestion,removeUnansweredQuestion,  } = useAnswerStore();
+  
+  const [selectedOption, setSelectedOptionLocal] = useState(getSelectedOption(currentQuestionIndex)); // Local state to sync with the store
   const { getallquestion } = useGetAllQuestion();
   const [questions, setQuestions] = useState([]);
   const [contentOverflow, setContentOverflow] = useState(false);
   const { sendAnswer } = useSubmitAnswer();
-  const [selectedOption, setSelectedOption] = useState(null);
+  
+  
   const { saveProgress } = saveUserProgress();
 
   useEffect(() => {
@@ -37,14 +41,35 @@ const QuestionSection = ({ currentQuestionIndex, setQuestionIndex  }) => {
     }
   }, [currentQuestionIndex, questions]);
 
+
+  // Synchronize the local state with the persisted store
+  useEffect(() => {
+    const storedOption = getSelectedOption(currentQuestionIndex);
+    console.log("hhhh",storedOption)
+    console.log("iiii",selectedOption);
+  if (storedOption !== selectedOption) {
+    setSelectedOptionLocal(storedOption); // Sync the local state with the global state
+  }
+  }, [currentQuestionIndex,getSelectedOption]);
+
   const handleChange = (optionId) => {
-    setSelectedOption(optionId);
+    setSelectedOptionLocal(optionId);
+    //setSelectedOption(currentQuestionIndex, optionId); 
   };
 
-  const handleClearResponse = () => {
-    setSelectedOption(null); // Reset selected option
-    addUnansweredQuestion(currentQuestionIndex); // Mark as unanswered
-    removeAnsweredQuestion(currentQuestionIndex); // Remove from answered list
+  const handleClearResponse = async () => {
+    setSelectedOptionLocal(null); // Reset local state
+    removeAnsweredQuestion(currentQuestionIndex);
+    addUnansweredQuestion(currentQuestionIndex);
+    clearSelectedOption(currentQuestionIndex);
+    
+    const progressData = {
+      answeredQuestions: useAnswerStore.getState().answeredQuestions,
+      unansweredQuestions: useAnswerStore.getState().unansweredQuestions,
+      selectedOptions: useAnswerStore.getState().selectedOptions,
+    };
+
+    await saveProgress(progressData);
   };
 
   const handleNextQuestion = async () => {
@@ -56,20 +81,23 @@ const QuestionSection = ({ currentQuestionIndex, setQuestionIndex  }) => {
       };
 
       await sendAnswer(apiData); // Save the answer
-
-      const progressData ={
-        answeredQuestions: useAnswerStore.getState().answeredQuestions,
-        unansweredQuestions: useAnswerStore.getState().unansweredQuestions,
-      }
-
-      await saveProgress(progressData);
-
+      setSelectedOption(currentQuestionIndex, selectedOption);
       addAnsweredQuestion(currentQuestionIndex);
-      setSelectedOption(null);
+      removeUnansweredQuestion(currentQuestionIndex);
     }
     else{
       addUnansweredQuestion(currentQuestionIndex);
     }
+
+    const progressData ={
+      answeredQuestions: useAnswerStore.getState().answeredQuestions,
+      unansweredQuestions: useAnswerStore.getState().unansweredQuestions,
+      selectedOptions: useAnswerStore.getState().selectedOptions,
+    }
+    console.log("opt",progressData)
+
+    await saveProgress(progressData);
+
 
     if (currentQuestionIndex < questions.length-1) {
       setQuestionIndex(currentQuestionIndex + 1);
@@ -95,6 +123,7 @@ const QuestionSection = ({ currentQuestionIndex, setQuestionIndex  }) => {
   };
 
   const currentQuestion = questions[currentQuestionIndex];
+ 
 
   return (
     <div className="col-12 col-lg-8">
@@ -222,10 +251,10 @@ const QuestionSection = ({ currentQuestionIndex, setQuestionIndex  }) => {
                       </div>
                       <div class="col">
                         <div class="p-3">
-                          <button className="btn btn-sm btn-outline btn-warning " onClick={handlePreviousQuestion}>
+                          <button className="btn btn-sm  btn-warning " onClick={handlePreviousQuestion}>
                             Previous
                           </button>
-                          <button className="btn btn-sm btn-outline btn-accent ml-3" onClick={handleNextQuestion}>
+                          <button className="btn btn-sm  btn-accent ml-3" onClick={handleNextQuestion}>
                             Save & Next
                           </button>
                         </div>

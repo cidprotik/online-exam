@@ -6,7 +6,6 @@ export const getUserProgress = async (req, res) => {
 		const {examId} = req.body;
 	  // Find the user's progress by their ID
 	  const userProgress = await UserProgress.findOne({ userId });
-	console.log(userProgress); //
 	  if (!userProgress) {
 		// If no progress found, create a new record with default values
 		const newUserProgress = new UserProgress({ userId, examId });
@@ -25,12 +24,11 @@ export const getUserProgress = async (req, res) => {
 export const updateUserProgress = async (req, res) => {
 	try {
 	  const { userId } = req.body; // Assuming user ID is available via auth middleware
-	  const { answeredQuestions, unansweredQuestions } = req.body;
-		console.log("ans",answeredQuestions)
+	  const { answeredQuestions, unansweredQuestions,selectedOptions } = req.body;
 	  // Find the user's progress and update it
 	  const updatedProgress = await UserProgress.findOneAndUpdate(
 		{ userId },
-		{ answeredQuestions, unansweredQuestions },
+		{ answeredQuestions, unansweredQuestions, selectedOptions},
 		{ new: true } // Return the updated document
 	  );
   

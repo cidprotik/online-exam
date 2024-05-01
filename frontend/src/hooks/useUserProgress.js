@@ -14,7 +14,7 @@ export const getUserProgress = () => {
             examId,     // Add examId
             userId
         };
-        console.log("oookkk",dataToSend);
+        
         try {
             const res = await fetch("/api/userprogress/", {
 				method: "POST",

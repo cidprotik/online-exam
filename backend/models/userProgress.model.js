@@ -20,7 +20,11 @@ const userProgressSchema = new mongoose.Schema(
 			type: [Number], // Array of question indexes that are unanswered
 			default: [],
 		  },
-		// createdAt, updatedAt => Member since <createdAt>
+		  selectedOptions: {
+			type: Map,
+ 			of: String, // Assuming options are strings (like 'A', 'B', 'C', 'D')
+            default: {}, 
+		  },
 	},
 	{ timestamps: true }
 );

@@ -7,15 +7,19 @@ import useAnswerStore from '../../zustand/useAnswerStore';
 import {getUserProgress} from "../../hooks/useUserProgress";
 function Exam() {
 
-  const { setAnsweredQuestions, setUnansweredQuestions } = useAnswerStore();
+  const { setAnsweredQuestions, setUnansweredQuestions,fetchSelectedOptions } = useAnswerStore();
+  
   const { getProgress } = getUserProgress();
 
   useEffect(() => {
     const fetchUserProgress = async () => {
       const data = await getProgress();
-      const { answeredQuestions, unansweredQuestions } = data;
+      
+      const { answeredQuestions, unansweredQuestions,selectedOptions } = data;
       setAnsweredQuestions(answeredQuestions); // Update global state
         setUnansweredQuestions(unansweredQuestions);
+        console.log("Fetched selectedOptions:", selectedOptions);
+        fetchSelectedOptions(selectedOptions)
     };
 
     fetchUserProgress(); // Fetch progress on component mount (i.e., login)
