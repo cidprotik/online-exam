@@ -1,6 +1,5 @@
 
 import React, { useState,useEffect } from "react";
-import axios from "axios";
 import ExamHeader from "../../components/exam/ExamHeader";
 import QuestionSection from "../../components/exam/QuestionSection";
 import SideButton from "../../components/exam/SideButton";

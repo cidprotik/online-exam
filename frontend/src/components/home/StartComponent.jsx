@@ -1,14 +1,23 @@
 import React from 'react'
 import useExamStore from '../../zustand/useExamStore';
 import { useNavigate } from 'react-router-dom';
+import { useAuthContext } from '../../context/AuthContext';
 
 const StartComponent = ({exam}) => {
   const { setExam } = useExamStore();
   const navigate = useNavigate();
+  const { authUser } = useAuthContext();
+  const userType = authUser.userType;
 
   const enterExam = () => {
     setExam(exam); // set the current exam as the selected exam
-    navigate('/instraction');
+    
+    if(userType === 'admin') {
+      navigate('/examdetails');
+    }
+    else{
+      navigate('/instraction');
+    }
   };
 
   return (
@@ -39,7 +48,20 @@ const StartComponent = ({exam}) => {
         </li>
       </ul>
       <div className="d-flex justify-content-center my-4">
-        <button className="btn btn-sm btn-primary" onClick={enterExam}>Enter to the Exam</button>
+          {userType === "admin" ?(
+          <>
+            <button className={`btn btn-sm mr-4  disabled ${exam.status === "active" ? "btn-success" : "btn-error"}`}>
+              {exam.status === "active" ? "Active" : "Deactive"}
+            </button>
+            <button className="btn btn-sm ml-4 btn-primary" onClick={enterExam}>Exam Details</button>
+          </>  
+          ):(<button
+            className="btn btn-sm btn-primary"
+            onClick={enterExam}
+          >
+            Enter to the Exam
+          </button>)}
+          
       </div>
     </div>
   </div>
