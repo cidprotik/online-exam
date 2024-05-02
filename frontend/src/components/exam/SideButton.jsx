@@ -18,10 +18,6 @@ const SideButton = ({ onSidebarClick }) => {
     fetchQuestions(); // Call the fetching function once when component mounts
   }, []);
 
-  const handleBoxClick = (index) => {
-    console.log(index)
-    onSidebarClick(index); // Call the parent callback function
-  };
   
   return (
     <div className="col-12 col-lg-4">
@@ -33,7 +29,7 @@ const SideButton = ({ onSidebarClick }) => {
                         className="bg-primary mb-2 pb-1 text-white text-center bold"
                         style={{ borderRadius: "20px", marginTop: "-10px" }}
                       >
-                        Total Question : 100
+                        Total Question : {questions.length}
                       </p>
                     </div>
                   </div>
@@ -43,14 +39,14 @@ const SideButton = ({ onSidebarClick }) => {
                         className="answer-instruction bg-success text-white rounded d-inline text-center pt-2 col-auto"
                         style={{ width: 40, height: 38 }}
                       >
-                        <b>1</b>
+                        <b>{answeredQuestions.length}</b>
                       </div>
                       <span className="text-white bold col mt-2">Answered</span>
                       <div
                         className="notanswer-instruction bg-danger text-white rounded d-inline text-center pt-2 col-auto"
                         style={{ width: 40, height: 38 }}
                       >
-                        2
+                        {unansweredQuestions.length}
                       </div>
                       <span className="text-white bold col mt-2">
                         Not Answered
@@ -61,7 +57,7 @@ const SideButton = ({ onSidebarClick }) => {
                         className="notvisited-instruction bg-secondary text-white rounded d-inline text-center pt-2 col-auto"
                         style={{ width: 40, height: 38 }}
                       >
-                        3
+                       {questions.length-(answeredQuestions.length+unansweredQuestions.length)}
                       </div>
                       <span className="text-white bold col mt-2">
                         Not Visited
@@ -87,7 +83,7 @@ const SideButton = ({ onSidebarClick }) => {
                       {questions.map((_, index) => (
         <div key={index} class="scrollable-container">
           <div
-            className={`box rounded cursor-pointer ${
+            className={`box rounded cursor-pointer text-white ${
               answeredQuestions.includes(index)
                 ? 'bg-success' // Green for answered
                 : unansweredQuestions.includes(index)

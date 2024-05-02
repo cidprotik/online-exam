@@ -6,11 +6,11 @@ import useAnswerStore from '../../zustand/useAnswerStore';
 import { saveUserProgress } from '../../hooks/useUserProgress';
 
 
-const QuestionSection = ({ currentQuestionIndex, setQuestionIndex  }) => {
+const QuestionSection = ({ currentQuestionIndex, setQuestionIndex,selectedOptions }) => {
   const {setSelectedOption,
     getSelectedOption,clearSelectedOption, addAnsweredQuestion,addUnansweredQuestion,removeAnsweredQuestion,removeUnansweredQuestion,  } = useAnswerStore();
   
-  const [selectedOption, setSelectedOptionLocal] = useState(getSelectedOption(currentQuestionIndex)); // Local state to sync with the store
+  const [selectedOption, setSelectedOptionLocal] = useState(null);
   const { getallquestion } = useGetAllQuestion();
   const [questions, setQuestions] = useState([]);
   const [contentOverflow, setContentOverflow] = useState(false);
@@ -26,11 +26,11 @@ const QuestionSection = ({ currentQuestionIndex, setQuestionIndex  }) => {
         setQuestions(data.result);
       }
     };
-
+    
     fetchQuestions();
   }, []);
 
-  // Check if content overflows to toggle scrolling
+ 
   useEffect(() => {
     const cardBody = document.querySelector('.card-body2');
 
@@ -45,12 +45,15 @@ const QuestionSection = ({ currentQuestionIndex, setQuestionIndex  }) => {
   // Synchronize the local state with the persisted store
   useEffect(() => {
     const storedOption = getSelectedOption(currentQuestionIndex);
-    console.log("hhhh",storedOption)
-    console.log("iiii",selectedOption);
-  if (storedOption !== selectedOption) {
-    setSelectedOptionLocal(storedOption); // Sync the local state with the global state
-  }
-  }, [currentQuestionIndex,getSelectedOption]);
+    
+    setSelectedOptionLocal(storedOption);
+    
+    if (storedOption === undefined || storedOption === null) {
+      addUnansweredQuestion(currentQuestionIndex);
+    } 
+   
+    }, [selectedOptions,currentQuestionIndex,getSelectedOption]);
+
 
   const handleChange = (optionId) => {
     setSelectedOptionLocal(optionId);
@@ -152,72 +155,40 @@ const QuestionSection = ({ currentQuestionIndex, setQuestionIndex  }) => {
         </div>
       </div>
 
-      <div className="radio-options" style={{ position: contentOverflow ? 'absolute' : 'static', bottom: contentOverflow ? '65px' : 'auto', width: '100%', padding: '0', margin: '0' }}>
-      <label
-                        htmlFor="option1"
-                        className={
-                          selectedOption === "option1" ? "labelselected" : ""
-                        }
-                      >
-                        <input
-                          type="radio"
-                          id="option1"
-                          className="options"
-                          checked={selectedOption === "option1"}
-                          onChange={() => handleChange("option1")}
-                        />
-                        <span className={selectedOption === "option1" ? "selectspan" : ""}>A</span>&nbsp;<text className={selectedOption === "option1" ? "text-white" : ""}>{currentQuestion.option1}</text>
-                      </label>
+      <div
+  className="radio-options"
+  style={{
+    position: contentOverflow ? 'absolute' : 'static',
+    bottom: contentOverflow ? '65px' : 'auto',
+    width: '100%',
+    padding: '0',
+    margin: '0',
+  }}
+>
+  {['option1', 'option2', 'option3', 'option4'].map((option, index) => (
+    <label
+      key={option}
+      htmlFor={option}
+      className={selectedOption === option ? 'labelselected' : ''}
+    >
+      <input
+        type="radio"
+        id={option}
+        className="options"
+        checked={selectedOption === option}
+        onChange={() => handleChange(option)}
+      />
+      <span className={selectedOption === option ? 'selectspan' : ''}>
+        {String.fromCharCode(65 + index)}
+      </span>
+      &nbsp;
+      <text className={selectedOption === option ? 'text-white' : ''}>
+        {currentQuestion[option]}
+      </text>
+    </label>
+  ))}
+</div>
 
-                      <label
-                        htmlFor="option2"
-                        className={
-                          selectedOption === "option2" ? "labelselected" : ""
-                        }
-                      >
-                        <input
-                          type="radio"
-                          id="option2"
-                          className="options"
-                          checked={selectedOption === "option2"}
-                          onChange={() => handleChange("option2")}
-                        />
-                        <span className={selectedOption === "option2" ? "selectspan" : ""}>B</span>&nbsp; <text className={selectedOption === "option2" ? "text-white" : ""}>{currentQuestion.option2}</text>
-                      </label>
-
-                      <label
-                        htmlFor="option3"
-                        className={
-                          selectedOption === "option3" ? "labelselected" : ""
-                        }
-                      >
-                        <input
-                          type="radio"
-                          id="option3"
-                          className="options"
-                          checked={selectedOption === "option3"}
-                          onChange={() => handleChange("option3")}
-                        />
-                        <span className={selectedOption === "option3" ? "selectspan" : ""}>C</span>&nbsp;
-                        <text className={selectedOption === "option3" ? "text-white" : ""}>{currentQuestion.option3}</text>
-                      </label>
-
-                      <label
-                        htmlFor="option4"
-                        className={
-                          selectedOption === "option4" ? "labelselected" : ""
-                        }
-                      >
-                        <input
-                          type="radio"
-                          id="option4"
-                          className="options"
-                          checked={selectedOption === "option4"}
-                          onChange={() => handleChange("option4")}
-                        />
-                        <span className={selectedOption === "option4" ? "selectspan" : ""}>D</span>&nbsp;<text className={selectedOption === "option4" ? "text-white" : ""}>{currentQuestion.option4}</text>
-                      </label>
-      </div>
       <div
                       class="row row-cols-1 row-cols-md-3 row-cols-xl-3 g-0 row-group text-center border-top"
                       style={{

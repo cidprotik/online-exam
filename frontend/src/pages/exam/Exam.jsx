@@ -8,8 +8,19 @@ import {getUserProgress} from "../../hooks/useUserProgress";
 function Exam() {
 
   const { setAnsweredQuestions, setUnansweredQuestions,fetchSelectedOptions } = useAnswerStore();
-  
+  const [firstOption, setFirstOption] = useState(null);
   const { getProgress } = getUserProgress();
+
+  const extractFirstOption = (options) => {
+    const firstEntry = Object.entries(options)[0];
+    if (firstEntry) {
+      const [key, value] = firstEntry;
+      if (key === "0") {
+        return value; // Return firstValue if firstKey is '0'
+      }
+    }
+    return null; // Otherwise return null
+  };
 
   useEffect(() => {
     const fetchUserProgress = async () => {
@@ -18,7 +29,8 @@ function Exam() {
       const { answeredQuestions, unansweredQuestions,selectedOptions } = data;
       setAnsweredQuestions(answeredQuestions); // Update global state
         setUnansweredQuestions(unansweredQuestions);
-        console.log("Fetched selectedOptions:", selectedOptions);
+        setFirstOption(extractFirstOption(selectedOptions));
+        
         fetchSelectedOptions(selectedOptions)
     };
 
@@ -44,7 +56,7 @@ function Exam() {
           <ExamHeader />
           {/*end row*/}
           <div className="row">
-            <QuestionSection currentQuestionIndex={currentQuestionIndex} setQuestionIndex={handleSetQuestionIndex}/>
+            <QuestionSection currentQuestionIndex={currentQuestionIndex} setQuestionIndex={handleSetQuestionIndex} selectedOptions={firstOption}/>
             <SideButton onSidebarClick={handleSidebarClick} />
           </div>
           {/*end row*/}
