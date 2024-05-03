@@ -25,6 +25,10 @@ const userProgressSchema = new mongoose.Schema(
  			of: String, // Assuming options are strings (like 'A', 'B', 'C', 'D')
             default: {}, 
 		  },
+		  markedForReview: {
+			type: [Number], // Array of question indexes that are unanswered
+			default: [],
+		  },
 	},
 	{ timestamps: true }
 );

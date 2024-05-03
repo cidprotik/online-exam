@@ -8,6 +8,7 @@ const useAnswerStore = create(
       answeredQuestions: [], // List of answered questions
       unansweredQuestions: [], // List of unanswered questions
       selectedOptions: {}, // Dictionary of selected options for each question
+      markedForReview: [],
       addAnsweredQuestion: (index) => {
         set((state) => {
           const updatedUnanswered = state.unansweredQuestions.filter((i) => i !== index);
@@ -75,6 +76,31 @@ const useAnswerStore = create(
           // Copy the existing state and update it with the new selectedOptions
           return { selectedOptions: { ...state.selectedOptions, ...selectedOptions } };
         });
+      },
+      addMarkedForReview: (index) => {
+        set((state) => {
+          if (!state.markedForReview.includes(index)) {
+            return { markedForReview: [...state.markedForReview, index] };
+          }
+          return state; // If already marked, do nothing
+        });
+      },
+      // Setter for markedForReview state
+      setMarkedForReview: (questions) => {
+        set({ markedForReview: questions });
+      },
+
+      // Method to remove a question index from marked for review
+      removeMarkedForReview: (index) => {
+        set((state) => {
+          const updatedMarkedForReview = state.markedForReview.filter((i) => i !== index);
+          return { markedForReview: updatedMarkedForReview };
+        });
+      },
+
+      // Method to check if a question is marked for review
+      isMarkedForReview: (index) => {
+        return useAnswerStore.getState().markedForReview.includes(index);
       },
     }),
     {

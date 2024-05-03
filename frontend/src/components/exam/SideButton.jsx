@@ -3,9 +3,16 @@ import useGetAllQuestion from '../../hooks/useGetAllQuestion';
 import useAnswerStore from '../../zustand/useAnswerStore';
 
 const SideButton = ({ onSidebarClick }) => {
-  const { answeredQuestions,unansweredQuestions } = useAnswerStore();
+  const { answeredQuestions,unansweredQuestions,markedForReview  } = useAnswerStore();
   const { getallquestion, loading } = useGetAllQuestion();
   const [questions, setQuestions] = useState([]);
+
+  const answermark = answeredQuestions.filter(index =>
+    markedForReview.includes(index)
+  );
+  const onlymark = markedForReview.length - answermark.length;
+  const answerno = answeredQuestions.length-answermark.length;
+  const notvisited = questions.length -( answerno + onlymark + unansweredQuestions.length + answermark.length);
 
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -39,7 +46,7 @@ const SideButton = ({ onSidebarClick }) => {
                         className="answer-instruction bg-success text-white rounded d-inline text-center pt-2 col-auto"
                         style={{ width: 40, height: 38 }}
                       >
-                        <b>{answeredQuestions.length}</b>
+                        <b>{answerno}</b>
                       </div>
                       <span className="text-white bold col mt-2">Answered</span>
                       <div
@@ -57,7 +64,7 @@ const SideButton = ({ onSidebarClick }) => {
                         className="notvisited-instruction bg-secondary text-white rounded d-inline text-center pt-2 col-auto"
                         style={{ width: 40, height: 38 }}
                       >
-                       {questions.length-(answeredQuestions.length+unansweredQuestions.length)}
+                       {notvisited}
                       </div>
                       <span className="text-white bold col mt-2">
                         Not Visited
@@ -66,11 +73,24 @@ const SideButton = ({ onSidebarClick }) => {
                         className="markforreview-instruction bg-warning text-white rounded d-inline text-center pt-2 col-auto"
                         style={{ width: 40, height: 38 }}
                       >
-                        0
+                        {onlymark}
                       </div>
                       <span className="text-white bold col mt-2">
                         Marked for Review
                       </span>
+                    </div>
+                    <div className="row mx-1 mb-3">
+                      <div
+                        className="answered-review bg-warning text-white rounded d-inline text-center pt-2 col-auto"
+                        style={{ width: 40, height: 38,position: "relative"}}
+                      >
+                       {answermark.length}
+                       <div className="inner-box rounded"></div>
+                      </div>
+                      <span className="text-white bold col mt-2">
+                        Answered & Mark for Review
+                      </span>
+                      
                     </div>
 
                     <p className="bg-info mt-2 p-2 text-white text-center">
@@ -84,15 +104,22 @@ const SideButton = ({ onSidebarClick }) => {
         <div key={index} class="scrollable-container">
           <div
             className={`box rounded cursor-pointer text-white ${
+              markedForReview.includes(index)
+                ?'bg-warning'
+                :
               answeredQuestions.includes(index)
                 ? 'bg-success' // Green for answered
                 : unansweredQuestions.includes(index)
                 ? 'bg-danger' // Red for unanswered
+                
                 : 'bg-secondary' // Default gray for not attempted
             }`}
             onClick={() => onSidebarClick(index + 1)}
           >
             {index + 1}
+            {answeredQuestions.includes(index) && markedForReview.includes(index) ? (
+               <div className="inner-box rounded"></div> // Only if both conditions are met
+              ) : null}
           </div>
         </div>
       ))}

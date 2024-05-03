@@ -8,8 +8,11 @@ import { saveUserProgress } from '../../hooks/useUserProgress';
 
 const QuestionSection = ({ currentQuestionIndex, setQuestionIndex,selectedOptions }) => {
   const {setSelectedOption,
-    getSelectedOption,clearSelectedOption, addAnsweredQuestion,addUnansweredQuestion,removeAnsweredQuestion,removeUnansweredQuestion,  } = useAnswerStore();
-  
+    getSelectedOption,clearSelectedOption, addAnsweredQuestion,addUnansweredQuestion,removeAnsweredQuestion,removeUnansweredQuestion, addMarkedForReview, removeMarkedForReview, isMarkedForReview } = useAnswerStore();
+
+    const [markedForReview, setMarkedForReview] = useState(
+      isMarkedForReview(currentQuestionIndex)
+    );
   const [selectedOption, setSelectedOptionLocal] = useState(null);
   const { getallquestion } = useGetAllQuestion();
   const [questions, setQuestions] = useState([]);
@@ -54,10 +57,13 @@ const QuestionSection = ({ currentQuestionIndex, setQuestionIndex,selectedOption
    
     }, [selectedOptions,currentQuestionIndex,getSelectedOption]);
 
+    useEffect(() => {
+      setMarkedForReview(isMarkedForReview(currentQuestionIndex));
+    }, [currentQuestionIndex]);
+
 
   const handleChange = (optionId) => {
     setSelectedOptionLocal(optionId);
-    //setSelectedOption(currentQuestionIndex, optionId); 
   };
 
   const handleClearResponse = async () => {
@@ -65,7 +71,8 @@ const QuestionSection = ({ currentQuestionIndex, setQuestionIndex,selectedOption
     removeAnsweredQuestion(currentQuestionIndex);
     addUnansweredQuestion(currentQuestionIndex);
     clearSelectedOption(currentQuestionIndex);
-    
+    removeMarkedForReview(currentQuestionIndex);
+    setMarkedForReview(false);
     const progressData = {
       answeredQuestions: useAnswerStore.getState().answeredQuestions,
       unansweredQuestions: useAnswerStore.getState().unansweredQuestions,
@@ -87,17 +94,33 @@ const QuestionSection = ({ currentQuestionIndex, setQuestionIndex,selectedOption
       setSelectedOption(currentQuestionIndex, selectedOption);
       addAnsweredQuestion(currentQuestionIndex);
       removeUnansweredQuestion(currentQuestionIndex);
-    }
+      if (markedForReview) {
+        addMarkedForReview(currentQuestionIndex); // Ensure it's marked for review
+      }
+     else {
+      removeMarkedForReview(currentQuestionIndex); // Remove from "Marked for Review"
+        }
+     }
     else{
-      addUnansweredQuestion(currentQuestionIndex);
+      
+      if (markedForReview) {
+        addMarkedForReview(currentQuestionIndex); // Ensure it's marked for review
+        removeUnansweredQuestion(currentQuestionIndex);
+      } else {
+        addUnansweredQuestion(currentQuestionIndex);
+        removeMarkedForReview(currentQuestionIndex); // Remove from "Marked for Review"
+      }
     }
+
+    
 
     const progressData ={
       answeredQuestions: useAnswerStore.getState().answeredQuestions,
       unansweredQuestions: useAnswerStore.getState().unansweredQuestions,
       selectedOptions: useAnswerStore.getState().selectedOptions,
+      markedForReview: useAnswerStore.getState().markedForReview,
     }
-    console.log("opt",progressData)
+
 
     await saveProgress(progressData);
 
@@ -114,6 +137,13 @@ const QuestionSection = ({ currentQuestionIndex, setQuestionIndex,selectedOption
     }
   };
 
+  const handleMarkForReview = (e) => {
+    if (e.target.checked) {
+      setMarkedForReview(true);
+    } else {
+      setMarkedForReview(false);
+    }
+  };
 
   const handleFullscreenToggle = () => {
     if (screenfull.isEnabled) {
@@ -205,6 +235,8 @@ const QuestionSection = ({ currentQuestionIndex, setQuestionIndex,selectedOption
                             id="markForReviewCheckbox"
                             className="checkbox checkbox-accent"
                             style={{ margin: "0 10px -5px 0" }}
+                            checked={markedForReview}
+        onChange={handleMarkForReview}
                           />
                           <label
                             for="markForReviewCheckbox"

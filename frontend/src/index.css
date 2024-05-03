@@ -71,10 +71,10 @@ position: relative;
 .inner-box {
 width: 15px;
 height: 15px;
-background-color: red;
+background-color: rgb(0, 223, 0);
 position: absolute; /* Position the inner box absolutely within the parent */
 bottom: 0;
-left:0;
+left:10;
 }
 
 .starttime{

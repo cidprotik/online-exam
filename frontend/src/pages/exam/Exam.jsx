@@ -7,7 +7,7 @@ import useAnswerStore from '../../zustand/useAnswerStore';
 import {getUserProgress} from "../../hooks/useUserProgress";
 function Exam() {
 
-  const { setAnsweredQuestions, setUnansweredQuestions,fetchSelectedOptions } = useAnswerStore();
+  const { setAnsweredQuestions, setUnansweredQuestions,fetchSelectedOptions,setMarkedForReview } = useAnswerStore();
   const [firstOption, setFirstOption] = useState(null);
   const { getProgress } = getUserProgress();
 
@@ -26,11 +26,11 @@ function Exam() {
     const fetchUserProgress = async () => {
       const data = await getProgress();
       
-      const { answeredQuestions, unansweredQuestions,selectedOptions } = data;
+      const { answeredQuestions, unansweredQuestions,selectedOptions,markedForReview } = data;
       setAnsweredQuestions(answeredQuestions); // Update global state
         setUnansweredQuestions(unansweredQuestions);
         setFirstOption(extractFirstOption(selectedOptions));
-        
+        setMarkedForReview(markedForReview);
         fetchSelectedOptions(selectedOptions)
     };
 
