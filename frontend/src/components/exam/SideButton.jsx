@@ -12,7 +12,7 @@ const SideButton = ({ onSidebarClick }) => {
   );
   const onlymark = markedForReview.length - answermark.length;
   const answerno = answeredQuestions.length-answermark.length;
-  const notvisited = questions.length -( answerno + onlymark + unansweredQuestions.length + answermark.length);
+  const notvisited = questions.length - ( answerno + onlymark + unansweredQuestions.length + answermark.length);
 
   useEffect(() => {
     const fetchQuestions = async () => {
