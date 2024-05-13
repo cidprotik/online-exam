@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import StartComponent from "../../components/home/startComponent";
+import AddExamModal from "../../components/modal/AddExamModal";
 const AdminHome = () => {
   const [data, setData] = useState(null);
+  const [showModal, setShowModal] = useState(false); // State for modal
 
   useEffect(() => {
     fetchData();
@@ -20,6 +22,11 @@ const AdminHome = () => {
     }
   };
 
+  const toggleModal = () => {
+    setShowModal(!showModal);
+    console.log(showModal);
+  };
+
   if (!data) {
     return null; // Render nothing until data is fetched
   }
@@ -30,7 +37,7 @@ const AdminHome = () => {
       <div className="d-flex justify-content-around align-items-center flex-wrap mt-10">
       <div className="card radius-10 border-start  border-info " style={{
     position: 'fixed',
-    top: '10px', // Adjust the position as needed
+    top: '5px', // Adjust the position as needed
     left: '20px', // Keep the element aligned to the left
     right: '20px', // Keep the element aligned to the right, making it full-width
     zIndex: 1000, // Ensures it's on top of other content
@@ -58,6 +65,10 @@ const AdminHome = () => {
                       </div>
                     </div>
                     <div>
+                      <div className="btn btn-primary"  onClick={toggleModal}>Add New Exam</div>
+                      {showModal && <AddExamModal onClose={toggleModal} />}
+                    </div>
+                    <div>
                       <div
                         className="d-flex align-items-center"
                         href="#"
@@ -79,6 +90,7 @@ const AdminHome = () => {
                   </div>
                 </div>
               </div>
+              
       {data.map((exam, index) => (
         <div style={{marginTop:"5vh"}}>
         <StartComponent
@@ -87,9 +99,11 @@ const AdminHome = () => {
         />
         </div>
       ))}
+      
 </div>
 
       </div>
+      
     </div>
   );
 };
