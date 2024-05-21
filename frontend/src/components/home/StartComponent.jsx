@@ -1,13 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
 import useExamStore from '../../zustand/useExamStore';
 import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../../context/AuthContext';
+import AddExamModal from '../modal/AddExamModal';
 
 const StartComponent = ({exam}) => {
   const { setExam } = useExamStore();
   const navigate = useNavigate();
   const { authUser } = useAuthContext();
   const userType = authUser.userType;
+  const [showModal, setShowModal] = useState(false);
 
   const enterExam = () => {
     setExam(exam); // set the current exam as the selected exam
@@ -18,6 +20,12 @@ const StartComponent = ({exam}) => {
     else{
       navigate('/instraction');
     }
+  };
+
+  const toggleModal = () => {
+    
+    setShowModal(!showModal);
+    
   };
 
   return (
@@ -46,13 +54,18 @@ const StartComponent = ({exam}) => {
           Wrong Answer{" "}
           <span className="badge bg-danger rounded-pill">-{exam.wrongmark}</span>
         </li>
+        <li className="list-group-item d-flex bg-transparent justify-content-between align-items-center">
+          Status{" "}
+          <span className={`badge rounded-pill ${exam.status === "active" ? "bg-success" : "bg-error"}`}>{exam.status === "active" ? "Active" : "Deactive"}</span>
+        </li>
       </ul>
       <div className="d-flex justify-content-center my-4">
           {userType === "admin" ?(
           <>
-            <button className={`btn btn-sm mr-4  disabled ${exam.status === "active" ? "btn-success" : "btn-error"}`}>
-              {exam.status === "active" ? "Active" : "Deactive"}
+            <button className="btn btn-sm mr-4 btn-warning" onClick={toggleModal}>
+              Edit
             </button>
+            {showModal && <EditExamModal onClose={toggleModal} />}
             <button className="btn btn-sm ml-4 btn-primary" onClick={enterExam}>Exam Details</button>
           </>  
           ):(<button

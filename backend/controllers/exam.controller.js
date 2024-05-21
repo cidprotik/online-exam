@@ -2,16 +2,14 @@ import Exam from "../models/exam.model.js";
 
 export const addExam = async (req, res) => {
 	try {
-		const { examname, duration, totalquestion, rightmark, wrongmark, examtime, examdate } = req.body;
+		const { examName, date_time, duration, totalquestion, sectionData } = req.body;
 
         const requiredFields = [
-            { field: examname, message: "Please Enter exam name" },
+            { field: examName, message: "Please Enter exam name" },
+            { field: date_time, message: "Please Enter exam date and time" },
             { field: duration, message: "Please Enter exam duration" },
             { field: totalquestion, message: "Please Enter total question" },
-            { field: rightmark, message: "Please Enter right mark" },
-            { field: wrongmark, message: "Please Enter wrong mark" },
-            { field: examtime, message: "Please Enter exam time" },
-            { field: examdate, message: "Please Enter exam date" }
+            { field: sectionData, message: "Please Enter Atleast One Section" },
         ];
 
         for (const fieldData of requiredFields) {
@@ -21,7 +19,7 @@ export const addExam = async (req, res) => {
         }
 
 		const newExam = new Exam({
-			examname, duration, totalquestion, rightmark, wrongmark, examtime, examdate
+			examname:examName,date_time, duration, totalquestion, sectionData
 		});
 
 		if (newExam) {
@@ -39,7 +37,7 @@ export const addExam = async (req, res) => {
 		}
 	} catch (error) {
 		console.log("Error in exam controller", error.message);
-		res.status(500).json({ error: "Internal Server Error" });
+		res.status(500).json({ error: "May have Validation or Internal Server Error" });
 	}
 };
 

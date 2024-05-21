@@ -7,7 +7,7 @@ const AdminHome = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [showModal]);
 
   const fetchData = async () => {
     try {

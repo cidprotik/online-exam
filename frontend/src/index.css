@@ -179,3 +179,25 @@ border-width: 2.5px!important;
 }
 
 /* css end for blinking button in start exam */
+
+
+/* css start for add exam section button */
+
+
+.btn-blink {
+  border: 2px solid red;
+  animation: blink-animation 1s infinite;
+}
+
+@keyframes blink-animation {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+/* css end for add exam section button */

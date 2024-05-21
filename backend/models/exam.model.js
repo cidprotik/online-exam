@@ -1,38 +1,32 @@
 import mongoose from "mongoose";
 
+const sectionSchema = new mongoose.Schema({
+	noQuestion: Number,
+	maxAnswer: Number,
+	rightMark: Number,
+	wrongMark: Number,
+  });
+
 const examSchema = new mongoose.Schema(
 	{
 		examname: {
 			type: String,
 			required: true,
 		},
+		date_time: { 
+			type: Date, 
+			required: true 
+		},
 		duration: {
-			type: String,
+			type: Number,
 			required: true,
 		},
 		totalquestion: {
-			type: String,
+			type: Number,
 			required: true,
 			
 		},
-		rightmark: {
-			type: String,
-			required: true,
-			
-		},
-		wrongmark: {
-			type: String,
-            required: true,
-		},
-
-        examtime: {
-			type: String,
-            required: true,
-		},
-        examdate: {
-			type: Date,
-            default: Date.now
-		},
+		sectionData: [sectionSchema],
 		status: {
 			type: String,
             default: "active",
