@@ -8,7 +8,8 @@ const Home = () => {
   const [completed, setCompleted] = useState(false);
   const { selectedExam } = useExamStore();
   const navigate = useNavigate();
-
+  const aaa = new Date(selectedExam.date_time);
+  console.log("first",aaa)
   if (!selectedExam) {
     return (
         <div className="d-flex justify-center align-items-center">
@@ -17,16 +18,6 @@ const Home = () => {
     )
   }
 
-  const examDate = new Date(selectedExam.examdate);
-  const examTime = selectedExam.examtime;
-  const [hours, minutes] = examTime.split(":");
-  const examDateTime = new Date(
-    examDate.getFullYear(),
-    examDate.getMonth(),
-    examDate.getDate(),
-    parseInt(hours),
-    parseInt(minutes)
-  );
 
   const handleComplete = () => {
     setCompleted(true);
@@ -71,7 +62,7 @@ const Home = () => {
                     </div>
                     <div>
                     <Countdown
-                        date={examDateTime}
+                        date={new Date(selectedExam.date_time)}
                         renderer={({
                             completed,
                             formatted: { hours, minutes, seconds },
@@ -157,7 +148,7 @@ const Home = () => {
         <div className="px-4 ">
           <div className="d-flex  justify-content-around">
             <Countdown
-              date={examDateTime}
+              date={new Date(selectedExam.date_time)}
               renderer={({
                 completed,
                 formatted: { hours, minutes, seconds },

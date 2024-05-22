@@ -2,9 +2,11 @@ import React, { useState } from 'react'
 import useExamStore from '../../zustand/useExamStore';
 import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../../context/AuthContext';
-import AddExamModal from '../modal/AddExamModal';
+
+import EditExamModal from '../modal/EditExamModal';
 
 const StartComponent = ({exam}) => {
+  
   const { setExam } = useExamStore();
   const navigate = useNavigate();
   const { authUser } = useAuthContext();
@@ -15,7 +17,7 @@ const StartComponent = ({exam}) => {
     setExam(exam); // set the current exam as the selected exam
     
     if(userType === 'admin') {
-      navigate('/examdetails');
+      navigate('/examdetails',{ state: { examId: exam._id } });
     }
     else{
       navigate('/instraction');
@@ -65,7 +67,7 @@ const StartComponent = ({exam}) => {
             <button className="btn btn-sm mr-4 btn-warning" onClick={toggleModal}>
               Edit
             </button>
-            {showModal && <EditExamModal onClose={toggleModal} />}
+            {showModal && <EditExamModal examData={exam} onClose={toggleModal} />}
             <button className="btn btn-sm ml-4 btn-primary" onClick={enterExam}>Exam Details</button>
           </>  
           ):(<button

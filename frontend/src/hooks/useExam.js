@@ -20,7 +20,7 @@ export const useAddExam= () => {
 			if (data.error) {
 				throw new Error(data.error);
 			}
-            toast.success("User logged in successfully");
+            toast.success("New exam added successfully");
             console.log(data);
 		} catch (error) {
 			toast.error(error.message);
@@ -49,7 +49,7 @@ export const useEditExam= () => {
 			if (data.error) {
 				throw new Error(data.error);
 			}
-            toast.success("User logged in successfully");
+            toast.success("Exam Edited Successfully");
             console.log(data);
 		} catch (error) {
 			toast.error(error.message);

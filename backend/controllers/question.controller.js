@@ -209,6 +209,7 @@ export const addQuestionBulk = async (req, res) => {
 
             const newQuestion = new Question({
                 examId: questionData.examId,
+                section: questionData.section,
                 q_title: questionData.q_title,
                 option1: questionData.option1,
                 option2: questionData.option2,

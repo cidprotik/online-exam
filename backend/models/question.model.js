@@ -7,6 +7,10 @@ const questionSchema = new mongoose.Schema(
             ref: "Exam",
             required: true
         },
+		section: {
+			type: String,
+			default: "section1",
+		},
 		q_title: {
 			type: String,
 			required: true,

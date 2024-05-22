@@ -90,7 +90,7 @@ export const getExamAll = async (req, res) => {
 
 export const editExam = async (req, res) => {
     try {
-        const { examId, examname, duration, totalquestion, rightmark, wrongmark, examtime, examdate } = req.body;
+        const {examId, examName, date_time, duration, totalquestion, sectionData } = req.body;
 
         // Check if the question exists
         const existingExam = await Exam.findById({_id: examId});
@@ -100,14 +100,11 @@ export const editExam = async (req, res) => {
         }
 
         // Update the question fields
-        existingExam.examname = examname;
+        existingExam.examname = examName;
         existingExam.duration = duration;
+        existingExam.date_time = date_time;
         existingExam.totalquestion = totalquestion;
-        existingExam.rightmark = rightmark;
-        existingExam.wrongmark = wrongmark;
-        existingExam.examtime = examtime;
-		existingExam.examdate = examdate;
-
+        existingExam.sectionData = sectionData;
         // Save the updated question
         await existingExam.save();
 
@@ -116,10 +113,8 @@ export const editExam = async (req, res) => {
             examname: existingExam.examname,
             duration: existingExam.duration,
             totalquestion: existingExam.totalquestion,
-            rightmark: existingExam.rightmark,
-            wrongmark: existingExam.wrongmark,
-            examtime: existingExam.examtime,
-            examdate: existingExam.examdate,
+            sectionData: existingExam.sectionData,
+            date_time: existingExam.date_time,
         });
     } catch (error) {
         console.log("Error in exam controller", error.message);

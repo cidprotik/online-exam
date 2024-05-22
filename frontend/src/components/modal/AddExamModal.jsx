@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import useAddExam from '../../hooks/useAddExam';
+import {useAddExam} from '../../hooks/useExam';
 
 const AddExamModal = ({ onClose }) => {
   const [sections, setSections] = useState([]);
@@ -23,6 +23,13 @@ const AddExamModal = ({ onClose }) => {
       ...formData,
       sectionData: [...formData.sectionData, {}], // Add a new section data object
     });
+
+    if (errors['sectionData']) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        sectionData: undefined,
+      }));
+    }
   };
 
   const handleSectionClick = (index) => {
@@ -130,10 +137,17 @@ const AddExamModal = ({ onClose }) => {
     console.log("first", validationErrors)
     setErrors(validationErrors);
 
-    if (Object.keys(validationErrors).length === 0) {
+    if (Object.keys(validationErrors).length === 0 && formData.sectionData.length > 0) {
       await addexam(formData);
       onClose();
+    } else if (formData.sectionData.length === 0) {
+      // If no section is added, set an error indicating that at least one section is required
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        sectionData: "At least one section is required",
+      }));
     }
+
   };
 
   return (
@@ -176,6 +190,7 @@ const AddExamModal = ({ onClose }) => {
                   </div>
                   <div className="col-md-6 pb-3">
                     <button type="button" className="btn btn-sm btn-primary" onClick={addNewSection}>Add New Section</button>
+                    {errors['sectionData'] && <span className="text-danger">{errors['sectionData']}</span>}
                   </div>
                 </div>
                 <div className='row'>
