@@ -201,3 +201,8 @@ border-width: 2.5px!important;
   }
 }
 /* css end for add exam section button */
+
+/* table border for admin question */
+.border-2{
+  border: 2px solid #ccc !important;
+}

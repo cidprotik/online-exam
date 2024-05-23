@@ -156,7 +156,7 @@ const QuestionSection = ({ currentQuestionIndex, setQuestionIndex,selectedOption
   };
 
   const currentQuestion = questions[currentQuestionIndex];
- 
+  const isCodingQuestion = currentQuestion.q_title.trim().startsWith('#');
 
   return (
     <div className="col-12 col-lg-8">
@@ -180,7 +180,15 @@ const QuestionSection = ({ currentQuestionIndex, setQuestionIndex,selectedOption
         <div className="fs-5 text-white">{currentQuestionIndex + 1}.&nbsp;</div>
         <div>
           <p className="fs-5 text-white" id="question_title" style={{ textAlign: 'justify' }}>
-            <span className="question_title text-white">{currentQuestion.q_title}</span>
+          {isCodingQuestion ? (
+            <pre className="question_title text-white" style={{ whiteSpace: 'pre-wrap' }}>
+              {currentQuestion.q_title}
+            </pre>
+          ) : (
+            <span className="question_title text-white">
+              {currentQuestion.q_title}
+            </span>
+          )}
           </p>
         </div>
       </div>

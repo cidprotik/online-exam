@@ -134,7 +134,6 @@ const AddExamModal = ({ onClose }) => {
   const handleSubmit =  async (e) => {
     e.preventDefault();
     const validationErrors = validateFormData(formData);
-    console.log("first", validationErrors)
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length === 0 && formData.sectionData.length > 0) {
@@ -179,7 +178,7 @@ const AddExamModal = ({ onClose }) => {
                     {errors.date_time && <span className="text-danger">{errors.date_time}</span>}
                   </div>
                   <div className="col-md-6 pb-3">
-                    <label htmlFor="duration" className={`form-label ${errors.duration? 'text-danger' : ''}`}>Duration</label>
+                    <label htmlFor="duration" className={`form-label ${errors.duration? 'text-danger' : ''}`}>Duration(Minute)</label>
                     <input type="text" className={`form-control ${errors.duration? 'is-invalid' : ''}`} id="duration" name="duration" onChange={(e) => handleFormChange('duration', e.target.value)}/>
                     {errors.duration && <span className="text-danger">{errors.duration}</span>}
                   </div>

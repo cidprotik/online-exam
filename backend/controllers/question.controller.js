@@ -148,9 +148,16 @@ export const deleteQuestionAll = async (req, res) => {
 
 export const addQuestionBulk = async (req, res) => {
     try {
+
         if (!req.file || !req.file.originalname.match(/\.(xlsx|xls|csv)$/)) {
             return res.status(400).json({ error: 'Please upload a valid Excel or CSV file' });
         }
+
+        if (!req.body.examId) {
+            return res.status(400).json({ error: 'examId is required' });
+          }
+      
+        const examId = req.body.examId;
 
         let questions = [];
 
@@ -184,7 +191,7 @@ export const addQuestionBulk = async (req, res) => {
         const failedQuestions = [];
 
         const requiredFields = [
-            { key: 'examId', message: "exam name field is not available in excel" },
+            
             { key: 'q_title', message: "Question Title field is not available in excel" },
             { key: 'option1', message: "option 1 field is not available in excel" },
             { key: 'option2', message: "option 2 field is not available in excel" },
@@ -208,7 +215,7 @@ export const addQuestionBulk = async (req, res) => {
             }
 
             const newQuestion = new Question({
-                examId: questionData.examId,
+                examId,
                 section: questionData.section,
                 q_title: questionData.q_title,
                 option1: questionData.option1,

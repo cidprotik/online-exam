@@ -24,7 +24,6 @@ const AdminHome = () => {
 
   const toggleModal = () => {
     setShowModal(!showModal);
-    console.log(showModal);
   };
 
   if (!data) {
@@ -40,7 +39,7 @@ const AdminHome = () => {
     top: '5px', // Adjust the position as needed
     left: '20px', // Keep the element aligned to the left
     right: '20px', // Keep the element aligned to the right, making it full-width
-    zIndex: 1000, // Ensures it's on top of other content
+    zIndex: 500, // Ensures it's on top of other content
   
   }}>
                 <div className="p-2">

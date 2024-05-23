@@ -80,7 +80,7 @@ export const useGetAllQuestionAdmin= () => {
             return data;
         } catch (error) {
             const errorMessage = error.message || "An unexpected error occurred";
-            toast.error(errorMessage);
+            console.log(errorMessage);
         }
 	};
 

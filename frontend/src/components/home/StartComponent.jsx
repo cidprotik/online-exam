@@ -12,12 +12,13 @@ const StartComponent = ({exam}) => {
   const { authUser } = useAuthContext();
   const userType = authUser.userType;
   const [showModal, setShowModal] = useState(false);
+  const [status, setStatus] = useState(exam.status);
 
   const enterExam = () => {
     setExam(exam); // set the current exam as the selected exam
     
     if(userType === 'admin') {
-      navigate('/examdetails',{ state: { examId: exam._id } });
+      navigate('/examdetails',{ state: { examId: exam._id,examName:exam.examname } });
     }
     else{
       navigate('/instraction');
@@ -28,6 +29,12 @@ const StartComponent = ({exam}) => {
     
     setShowModal(!showModal);
     
+  };
+
+  const handleCheckboxChange = () => {
+    const newStatus = status === "active" ? "inactive" : "active";
+    setStatus(newStatus);
+    // Optionally handle any additional logic here, such as updating the status in a parent component or making an API call
   };
 
   return (
@@ -64,6 +71,20 @@ const StartComponent = ({exam}) => {
       <div className="d-flex justify-content-center my-4">
           {userType === "admin" ?(
           <>
+          <label className="cursor-pointer label mb-2">
+          <span className="label-text">Status</span> 
+          <input
+              type="checkbox"
+              id="statusToggle"
+              className="toggle toggle-success"
+              checked={status === "active"}
+              onChange={handleCheckboxChange}
+            />
+            <label htmlFor="statusToggle" className="ml-2 mb-0">
+              {status === "active" ? "Active" : "Inactive"}
+            </label>
+             </label>
+            
             <button className="btn btn-sm mr-4 btn-warning" onClick={toggleModal}>
               Edit
             </button>
