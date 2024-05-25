@@ -1,4 +1,5 @@
 import Exam from "../models/exam.model.js";
+import ExamSession from "../models/examSession.js"
 
 export const addExam = async (req, res) => {
 	try {
@@ -169,3 +170,36 @@ export const DeactiveExam = async (req, res) => {
         res.status(500).json({ error: "Internal Server Error" });
     }
 };
+
+export const saveCountdownEndTime = async (req, res) => {
+    const { userId, examId, endTime } = req.body;
+  
+    try {
+      // Save endTime to the database associated with the userId and examId
+      await ExamModel.updateOne(
+        { userId, examId },
+        { countdownEndTime: endTime },
+        { upsert: true }
+      );
+      res.status(200).send({ message: 'Countdown end time saved successfully' });
+    } catch (error) {
+      res.status(500).send({ message: 'Error saving countdown end time', error });
+    }
+  };
+
+  export const getCountdownEndTime = async (req, res) => {
+    const { userId, examId } = req.body;
+    
+    try {
+      // Fetch endTime from the database associated with the userId and examId
+      const examData = await ExamSession.findOne({ userId, examId });
+      
+      if (examData) {
+        res.status(200).json({ success: true, endTime: examData.countdownEndTime });
+      } else {
+        res.status(404).json({ success: false, message: 'No countdown end time found' });
+      }
+    } catch (error) {
+      res.status(500).send({ message: 'Error fetching countdown end time', error });
+    }
+  };

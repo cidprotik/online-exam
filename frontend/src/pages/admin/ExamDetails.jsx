@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useGetAllQuestionAdmin } from '../../hooks/useQuestion';
 import useExcelUpload from '../../hooks/useExcelUpload';
+import AddQuestionModal from '../../components/modal/AddQuestionModal';
 
 const ExamDetails = () => {
 
   const location = useLocation();
-  const { examId, examName } = location.state;
+  const { examId, examName,section } = location.state;
   const { allQuestions } = useGetAllQuestionAdmin();
   const [questions, setQuestions] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -49,6 +50,11 @@ const ExamDetails = () => {
     }
   };
 
+  const handleAddQuestion = async () => {
+    await fetchQuestions();
+    document.getElementById("addQuestionModal").checked = false;
+  };
+
   return (
     <div className="wrapper">
       <div className="page-wrapper">
@@ -72,7 +78,7 @@ const ExamDetails = () => {
               </div>
               <div>
                 <label htmlFor="uploadExcelModal" className="btn btn-sm btn-primary mr-2">Upload Excel</label>
-                <div className="btn btn-sm btn-primary ml-2">Add Questions</div>
+                <label htmlFor="addQuestionModal" className="btn btn-sm btn-primary ml-2">Add Questions</label>
               </div>
               <div>
                 <div className="d-flex align-items-center" href="#" role="button">
@@ -151,10 +157,16 @@ const ExamDetails = () => {
           </form>
           <div className="modal-action">
             <label htmlFor="uploadExcelModal" className="btn">Close</label>
-            <button type="button" className="btn btn-primary" onClick={handleUpload}>Upload</button>
+            <button type="button" className="btn btn-primary" onClick={handleUpload}>{loading ? (<span className="loading loading-spinner"></span>):(<span>Submit</span>)}</button>
           </div>
         </div>
       </div>
+      <AddQuestionModal
+        onClose={() => document.getElementById("addQuestionModal").checked = false}
+        onSave={handleAddQuestion}
+        sectionLength ={section}
+        examId = {examId}
+      />
     </div>
   );
 }

@@ -4,11 +4,9 @@ import useExamStore from '../../zustand/useExamStore';
 import ExamEndModal from '../modal/ExamEndModal';
 import { useAuthContext } from "./../../context/AuthContext";
 import useLogout from '../../hooks/useLogout';
-import { useGetCountdown } from '../../hooks/useExam';
 
 const ExamHeader = () => {
   const { loading, logout: performLogout } = useLogout();
-  const {  getcountdown } = useGetCountdown();
   const { authUser } = useAuthContext();
   const { selectedExam } = useExamStore();
   const duration = selectedExam.duration * 60 * 1000; // Exam duration in milliseconds
@@ -17,27 +15,30 @@ const ExamHeader = () => {
   const remainingTimeKey = 'remainingTime';
   const [endTime, setEndTime] = useState(null);
   const [isExamEnded, setIsExamEnded] = useState(false);
-  console.log("first",authUser);
+
   useEffect(() => {
-    const fetchCountdownEndTime = async () => {
-     const response = await getcountdown({ userId: authUser._id, examId: selectedExam._id });
-     console.log("hhh",response)
-     const storedEndTime = response.data?.endTime;
-     console.log("ggg",storedEndTime)
-      if (storedEndTime) {
-        setEndTime(storedEndTime);
-        setIsExamEnded(Date.now() >= storedEndTime);
-        localStorage.setItem(countdownEndKey, storedEndTime);
-      } else {
-        const currentTime = Date.now();
-        const newEndTime = currentTime + duration;
-        setEndTime(newEndTime);
-        localStorage.setItem(countdownEndKey, newEndTime);
-      }
-    };
-  
-    fetchCountdownEndTime();
-  }, [duration, authUser.id, selectedExam.id]);
+    const currentTime = Date.now();
+    let storedEndTime = localStorage.getItem(countdownEndKey);
+    let remainingTime = localStorage.getItem(remainingTimeKey);
+
+    if (remainingTime) {
+      remainingTime = parseInt(remainingTime, 10);
+      storedEndTime = currentTime + remainingTime;
+      localStorage.removeItem(remainingTimeKey);
+    } else if (!storedEndTime) {
+      storedEndTime = currentTime + duration;
+    } else {
+      storedEndTime = parseInt(storedEndTime, 10);
+    }
+
+    localStorage.setItem(countdownEndKey, storedEndTime);
+    setEndTime(storedEndTime);
+    setIsExamEnded(currentTime >= storedEndTime);
+
+    // Debug logs to verify values
+    // console.log(`Current Time: ${currentTime}`);
+    // console.log(`Stored End Time: ${storedEndTime}`);
+  }, [duration]);
 
   const onCountdownComplete = () => {
     setIsExamEnded(true);
@@ -47,22 +48,6 @@ const ExamHeader = () => {
 
   const handleLogout = async () => {
     const remainingTime = endTime - Date.now();
-    const countdownEndTime = Date.now() + remainingTime;
-  
-    // // Save countdown end time to backend
-    // await axios.post('/api/exam/save-countdown-end-time', {
-    //   userId: authUser.id,
-    //   examId: selectedExam.id,
-    //   endTime: countdownEndTime,
-    // });
-
-    await fetch('/api/exam/save-countdown-end-time', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId: authUser.id, examId: selectedExam.id, endTime: countdownEndTime, })
-    });
-  
-    // Proceed with the logout process
     localStorage.setItem(remainingTimeKey, remainingTime);
     await performLogout();
   };

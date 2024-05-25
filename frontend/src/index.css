@@ -94,12 +94,16 @@ left:10;
 width: 8px;
 }
 
+::-webkit-scrollbar {
+  height: 8px;
+  }
+
 ::-webkit-scrollbar-track {
 background: #555;
 }
 
 ::-webkit-scrollbar-thumb {
-background: #121212;
+background: #8a8989;
 border-radius: 5px;
 }
 

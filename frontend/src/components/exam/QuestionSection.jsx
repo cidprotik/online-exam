@@ -156,7 +156,10 @@ const QuestionSection = ({ currentQuestionIndex, setQuestionIndex,selectedOption
   };
 
   const currentQuestion = questions[currentQuestionIndex];
-  const isCodingQuestion = currentQuestion.q_title.trim().startsWith('#');
+  let isCodingQuestion = false;
+  if (currentQuestion) {
+    isCodingQuestion = currentQuestion.q_title.trim().startsWith('#');
+  }
 
   return (
     <div className="col-12 col-lg-8">

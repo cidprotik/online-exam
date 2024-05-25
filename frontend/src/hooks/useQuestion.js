@@ -6,11 +6,11 @@ import { toast } from "react-hot-toast";
 export const useAddQuestion= () => {
 	const [loading, setLoading] = useState(false);
     
-	const addexam = async (formData) => {
+	const addquestion = async (formData) => {
 		
 		setLoading(true);
 		try {
-			const res = await fetch("/api/exam/addexam", {
+			const res = await fetch("/api/question/addquestions", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify(formData),
@@ -20,7 +20,7 @@ export const useAddQuestion= () => {
 			if (data.error) {
 				throw new Error(data.error);
 			}
-            toast.success("New exam added successfully");
+            toast.success("New Question added successfully");
             console.log(data);
 		} catch (error) {
 			toast.error(error.message);
@@ -29,7 +29,7 @@ export const useAddQuestion= () => {
 		}
 	};
 
-	return { loading, addexam};
+	return { loading, addquestion};
 };
 
 export const useEditQuestion= () => {

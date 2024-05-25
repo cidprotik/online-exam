@@ -8,7 +8,7 @@ import Exam from '../models/exam.model.js';
 
 export const addQuestion = async (req, res) => {
 	try {
-		const { examId, q_title, option1, option2, option3, option4, answer } = req.body;
+		const { examId, q_title, option1, option2, option3, option4, answer,section } = req.body;
 
         const requiredFields = [
             { field: examId, message: "Please Select exam name" },
@@ -27,7 +27,7 @@ export const addQuestion = async (req, res) => {
         }
 
 		const newQuestion = new Question({
-			examId, q_title, option1, option2, option3, option4, answer
+			examId, q_title, option1, option2, option3, option4, answer,section
 		});
 
 		if (newQuestion) {

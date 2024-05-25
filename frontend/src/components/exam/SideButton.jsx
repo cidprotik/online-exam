@@ -44,14 +44,14 @@ const SideButton = ({ onSidebarClick }) => {
                     <div className="row mx-1 mb-3">
                       <div
                         className="answer-instruction bg-success text-white rounded d-inline text-center pt-2 col-auto"
-                        style={{ width: 40, height: 38 }}
+                        style={{ width: 41, height: 40 }}
                       >
                         <b>{answerno}</b>
                       </div>
                       <span className="text-white bold col mt-2">Answered</span>
                       <div
-                        className="notanswer-instruction bg-danger text-white rounded d-inline text-center pt-2 col-auto"
-                        style={{ width: 40, height: 38 }}
+                        className="notanswer-instruction bg-danger text-white rounded d-inline text-center col-auto pt-2"
+                        style={{ width: 41, height: 40 }}
                       >
                         {unansweredQuestions.length}
                       </div>
@@ -62,7 +62,7 @@ const SideButton = ({ onSidebarClick }) => {
                     <div className="row mx-1 mb-3">
                       <div
                         className="notvisited-instruction bg-secondary text-white rounded d-inline text-center pt-2 col-auto"
-                        style={{ width: 40, height: 38 }}
+                        style={{ width: 41, height: 40 }}
                       >
                        {notvisited}
                       </div>
@@ -71,7 +71,7 @@ const SideButton = ({ onSidebarClick }) => {
                       </span>
                       <div
                         className="markforreview-instruction bg-warning text-white rounded d-inline text-center pt-2 col-auto"
-                        style={{ width: 40, height: 38 }}
+                        style={{ width: 41, height: 40 }}
                       >
                         {onlymark}
                       </div>
@@ -82,7 +82,7 @@ const SideButton = ({ onSidebarClick }) => {
                     <div className="row mx-1 mb-3">
                       <div
                         className="answered-review bg-warning text-white rounded d-inline text-center pt-2 col-auto"
-                        style={{ width: 40, height: 38,position: "relative"}}
+                        style={{ width: 41, height: 38,position: "relative"}}
                       >
                        {answermark.length}
                        <div className="inner-box rounded"></div>
