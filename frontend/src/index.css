@@ -193,6 +193,7 @@ border-width: 2.5px!important;
   animation: blink-animation 1s infinite;
 }
 
+
 @keyframes blink-animation {
   0% {
     opacity: 1;
@@ -209,4 +210,12 @@ border-width: 2.5px!important;
 /* table border for admin question */
 .border-2{
   border: 2px solid #ccc !important;
+}
+
+.btn:focus {
+  outline: none; /* Remove the outline on focus */
+}
+
+.active-button{
+  border: 2px solid red;
 }

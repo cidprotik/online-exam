@@ -9,10 +9,11 @@ export const getUserProgress = () => {
     const userId = authUser._id;
     const examId = selectedExam._id;
 
-	const getProgress = async () => {
+	const getProgress = async (section) => {
         const dataToSend = {
             examId,     // Add examId
-            userId
+            userId,
+            selectedSection: section
         };
         
         try {

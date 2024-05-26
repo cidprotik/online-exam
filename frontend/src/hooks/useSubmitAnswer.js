@@ -15,7 +15,6 @@ const useSubmitAnswer = () => {
             examId,     // Add examId
             userId
         };
-        console.log(dataToSend);
         try {
             const res = await fetch("/api/answer/addanswer", {
 				method: "POST",

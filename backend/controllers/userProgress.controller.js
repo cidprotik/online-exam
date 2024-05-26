@@ -24,11 +24,11 @@ export const getUserProgress = async (req, res) => {
 export const updateUserProgress = async (req, res) => {
 	try {
 	  const { userId } = req.body; // Assuming user ID is available via auth middleware
-	  const { answeredQuestions, unansweredQuestions,selectedOptions,markedForReview } = req.body;
+	  const { answeredQuestions, unansweredQuestions,selectedOptions,markedForReview,selectedSection} = req.body;
 	  // Find the user's progress and update it
 	  const updatedProgress = await UserProgress.findOneAndUpdate(
 		{ userId },
-		{ answeredQuestions, unansweredQuestions, selectedOptions,markedForReview},
+		{ answeredQuestions, unansweredQuestions, selectedOptions,markedForReview,selectedSection},
 		{ new: true } // Return the updated document
 	  );
   

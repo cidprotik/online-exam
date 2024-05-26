@@ -5,12 +5,16 @@ import QuestionSection from "../../components/exam/QuestionSection";
 import SideButton from "../../components/exam/SideButton";
 import useAnswerStore from '../../zustand/useAnswerStore';
 import {getUserProgress} from "../../hooks/useUserProgress";
+import useExamStore from "../../zustand/useExamStore";
 function Exam() {
 
   const { setAnsweredQuestions, setUnansweredQuestions,fetchSelectedOptions,setMarkedForReview } = useAnswerStore();
   const [firstOption, setFirstOption] = useState(null);
   const { getProgress } = getUserProgress();
-
+  const { selectedExam } = useExamStore();
+  const [activeSectionIndex, setActiveSectionIndex] = useState(0);
+  const [sectionName, setSectionName] = useState("");
+  console.log(activeSectionIndex)
   const extractFirstOption = (options) => {
     const firstEntry = Object.entries(options)[0];
     if (firstEntry) {
@@ -24,7 +28,8 @@ function Exam() {
 
   useEffect(() => {
     const fetchUserProgress = async () => {
-      const data = await getProgress();
+      const sectionn = `section${activeSectionIndex + 1}`;
+      const data = await getProgress(sectionn);
       
       const { answeredQuestions, unansweredQuestions,selectedOptions,markedForReview } = data;
       setAnsweredQuestions(answeredQuestions); // Update global state
@@ -49,14 +54,33 @@ function Exam() {
     setCurrentQuestionIndex(index - 1); // Subtract 1 because index is 1-based
   };  
 
+  const handleSectionClick = (index,sectionName) => {
+    setSectionName(sectionName); 
+    setActiveSectionIndex(index); // Set the clicked section as active
+    setCurrentQuestionIndex(0);
+  };
+
   return (
     <>
       <div className="wrapper">
         <div className="page-wrapper">
           <ExamHeader />
-          {/*end row*/}
+          <div className="d-flex flex-wrap mb-3">
+            {selectedExam.sectionData.map((section, index) => (
+              <div key={index} className="p-2">
+                <button
+                  type="button"
+                  className={`btn btn-sm ${index === activeSectionIndex ? "btn-success active-button" : " "}`} // Add active class
+                  onClick={() => handleSectionClick(index,section.sectionName)}
+                >
+                  {section.sectionName}
+                </button>
+              </div>
+            ))}
+          </div>
+
           <div className="row">
-            <QuestionSection currentQuestionIndex={currentQuestionIndex} setQuestionIndex={handleSetQuestionIndex} selectedOptions={firstOption}/>
+            <QuestionSection currentQuestionIndex={currentQuestionIndex} setQuestionIndex={handleSetQuestionIndex} selectedOptions={firstOption} selectedSection={ activeSectionIndex + 1}/>
             <SideButton onSidebarClick={handleSidebarClick} />
           </div>
           {/*end row*/}

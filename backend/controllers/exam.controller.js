@@ -172,34 +172,33 @@ export const DeactiveExam = async (req, res) => {
 };
 
 export const saveCountdownEndTime = async (req, res) => {
-    const { userId, examId, endTime } = req.body;
-  
+    const { userId, examId, storedEndTime,remainingTime } = req.body;
+    console.log(userId, examId, storedEndTime,remainingTime);
     try {
-      // Save endTime to the database associated with the userId and examId
-      await ExamModel.updateOne(
-        { userId, examId },
-        { countdownEndTime: endTime },
-        { upsert: true }
-      );
-      res.status(200).send({ message: 'Countdown end time saved successfully' });
-    } catch (error) {
-      res.status(500).send({ message: 'Error saving countdown end time', error });
-    }
+        await ExamSession.updateOne(
+            { userId, examId },
+            { storedEndTime,remainingTime },
+            { upsert: true }
+          );
+          res.status(200).send({ message: 'Countdown end time saved successfully' });
+        } catch (error) {
+          res.status(500).send({ message: 'Error saving countdown end time', error });
+        }
   };
 
   export const getCountdownEndTime = async (req, res) => {
     const { userId, examId } = req.body;
     
     try {
-      // Fetch endTime from the database associated with the userId and examId
-      const examData = await ExamSession.findOne({ userId, examId });
-      
-      if (examData) {
-        res.status(200).json({ success: true, endTime: examData.countdownEndTime });
-      } else {
-        res.status(404).json({ success: false, message: 'No countdown end time found' });
+        const examSession = await ExamSession.findOne({ userId, examId });
+    
+        if (examSession) {
+          res.status(200).json({ success: true, storedEndTime:examSession.storedEndTime,remainingTime:examSession.remainingTime });
+        } else {
+          res.status(404).json({ success: false, message: 'No countdown end time found' });
+        }
+      } catch (error) {
+        console.error('Error fetching countdown end time:', error);
+        res.status(500).json({ success: false, message: 'Error fetching countdown end time', error });
       }
-    } catch (error) {
-      res.status(500).send({ message: 'Error fetching countdown end time', error });
-    }
   };

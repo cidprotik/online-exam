@@ -7,20 +7,25 @@ const useGetAllQuestion = () => {
     const { selectedExam } = useExamStore();
     const examId = selectedExam?._id;
 
-    const getallquestion = async () => {
+    const getallquestion = async (section) => {
+        // Check if section is undefined, if so, return early
+        if (section === undefined) {
+            return;
+        }
+    
         setLoading(true);
         try {
             const res = await fetch("/api/question/getallquestion", {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ examId }),
-			});
-
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ examId, section: `section${section}` }),
+            });
+    
             // If the response is not ok, handle the error
             if (!res.ok) {
                 throw new Error("Failed to fetch questions");
             }
-
+    
             const data = await res.json();
             return data;
         } catch (error) {
@@ -30,6 +35,7 @@ const useGetAllQuestion = () => {
             setLoading(false);
         }
     };
+    
 
     useEffect(() => {
         if (examId) {

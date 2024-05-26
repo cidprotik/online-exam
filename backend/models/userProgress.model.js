@@ -29,6 +29,9 @@ const userProgressSchema = new mongoose.Schema(
 			type: [Number], // Array of question indexes that are unanswered
 			default: [],
 		  },
+		  selectedSection: {
+			type: String, // Array of question indexes that are unanswered
+		  },
 	},
 	{ timestamps: true }
 );

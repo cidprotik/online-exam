@@ -101,6 +101,13 @@ const AddExamModal = ({ onClose }) => {
     if (!data.totalquestion) errors.totalquestion = 'Total question is required';
 
     data.sectionData.forEach((section, index) => {
+      if (!section.sectionName) {
+        errors[`sectionName_${index}`] = 'Section Name is required';
+        setSectionErrors((prevErrors) => ({ ...prevErrors, [index]: true }));
+      } else {
+        setSectionErrors((prevErrors) => ({ ...prevErrors, [index]: false }));
+      }
+
      if (!section.noQuestion) {
         errors[`noQuestion_${index}`] = 'Number of questions is required';
         setSectionErrors((prevErrors) => ({ ...prevErrors, [index]: true }));
@@ -137,6 +144,7 @@ const AddExamModal = ({ onClose }) => {
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length === 0 && formData.sectionData.length > 0) {
+      console.log('formdata', formData);
       await addexam(formData);
       onClose();
     } else if (formData.sectionData.length === 0) {
@@ -206,24 +214,30 @@ const AddExamModal = ({ onClose }) => {
                   ))}
                 </div>
                 {activeSection !== null && (
-                  <div className='p-4 border' style={{backgroundColor:"#9da2a7"}}>
+                  <div className='p-3 border' style={{backgroundColor:"#9da2a7"}}>
                   <div className="row  ">
-                    <div className="col-md-6 mb-2">
+                  <div className="col-md-6 mb-1">
+                    <label  className={`form-label ${errors[`sectionName_${activeSection}`]? 'text-danger' : ''}`}>Section Name</label>
+                        <input type="text" className={`form-control sec_name${activeSection+1} ${errors[`sectionName_${activeSection}`]? 'is-invalid' : ''}`} value={formData.sectionData[activeSection]?.sectionName || ''} onChange={(e) => handleSectionDataChange(activeSection, 'sectionName', e.target.value)} placeholder={`Input for ${sections[activeSection]}`} />
+                        {errors[`sectionName_${activeSection}`] && <span className="text-danger">{errors[`sectionName_${activeSection}`]}</span>}
+                    </div>
+
+                    <div className="col-md-6 mb-1">
                     <label  className={`form-label ${errors[`noQuestion_${activeSection}`]? 'text-danger' : ''}`}>No of Question</label>
                         <input type="number" className={`form-control no_ques_${activeSection+1} ${errors[`noQuestion_${activeSection}`]? 'is-invalid' : ''}`} value={formData.sectionData[activeSection]?.noQuestion || ''} onChange={(e) => handleSectionDataChange(activeSection, 'noQuestion', e.target.value)} placeholder={`Input for ${sections[activeSection]}`} />
                         {errors[`noQuestion_${activeSection}`] && <span className="text-danger">{errors[`noQuestion_${activeSection}`]}</span>}
                     </div>
-                    <div className="col-md-6 mb-2">
+                    <div className="col-md-6 mb-1">
                     <label className={`form-label ${errors[`maxAnswer_${activeSection}`]? 'text-danger' : ''}`}>Maximum Answer</label>
                       <input type="number" className={`form-control max_ans_${activeSection+1} ${errors[`maxAnswer_${activeSection}`]? 'is-invalid' : ''}`} value={formData.sectionData[activeSection]?.maxAnswer || ''} onChange={(e) => handleSectionDataChange(activeSection, 'maxAnswer', e.target.value)} placeholder={`Input for ${sections[activeSection]}`} />
                       {errors[`maxAnswer_${activeSection}`] && <span className="text-danger">{errors[`maxAnswer_${activeSection}`]}</span>}
                     </div>
-                    <div className="col-md-6 mb-2">
+                    <div className="col-md-6 mb-1">
                     <label className={`form-label ${errors[`rightMark_${activeSection}`]? 'text-danger' : ''}`}>Right Mark</label>
                       <input type="number" className={`form-control right_mark_${activeSection+1} ${errors[`rightMark_${activeSection}`]? 'is-invalid' : ''}`} value={formData.sectionData[activeSection]?.rightMark || ''} onChange={(e) => handleSectionDataChange(activeSection, 'rightMark', e.target.value)} placeholder={`Input for ${sections[activeSection]}`} />
                       {errors[`rightMark_${activeSection}`] && <span className="text-danger">{errors[`rightMark_${activeSection}`]}</span>}
                     </div>
-                    <div className="col-md-6 mb-2">
+                    <div className="col-md-6 mb-1">
                     <label className={`form-label ${errors[`wrongMark_${activeSection}`]? 'text-danger' : ''}`}>Nagative Mark</label>
                       <input type="number" className={`form-control wrong_mark_${activeSection+1} ${errors[`wrongMark_${activeSection}`]? 'is-invalid' : ''}`} value={formData.sectionData[activeSection]?.wrongMark || ''} onChange={(e) => handleSectionDataChange(activeSection, 'wrongMark', e.target.value)} placeholder={`Input for ${sections[activeSection]}`} />
                       {errors[`wrongMark_${activeSection}`] && <span className="text-danger">{errors[`wrongMark_${activeSection}`]}</span>}

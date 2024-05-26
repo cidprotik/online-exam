@@ -110,3 +110,27 @@ export const useGetCountdown= () => {
 
 	return { getcountdown};
 };
+
+export const useSaveCountdown= () => {
+    
+	const savecountdown = async (formData) => {
+		
+		try {
+			const res = await fetch("/api/exam/save-countdown-end-time", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(formData),
+			});
+
+			const data = await res.json();
+			if (data.error) {
+				throw new Error(data.error);
+			}
+
+		} catch (error) {
+			toast.error(error.message);
+		} 
+	};
+
+	return { savecountdown};
+};

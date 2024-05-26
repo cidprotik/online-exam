@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
 const sectionSchema = new mongoose.Schema({
+	sectionName: String,
 	noQuestion: Number,
 	maxAnswer: Number,
 	rightMark: Number,

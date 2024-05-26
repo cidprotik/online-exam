@@ -90,9 +90,14 @@ export const editQuestion = async (req, res) => {
 
 export const getQuestionAll = async (req, res) => {
     try {
-        const {examId} = req.body;
-
-        const existingExams = await Question.find({ examId });
+        const {examId,section} = req.body;
+        let existingExams;
+        if(section){
+             existingExams = await Question.find({ examId, section});
+        }
+        else{
+             existingExams = await Question.find({ examId });
+        }
 
         if (existingExams && existingExams.length > 0) {
             return res.status(200).json({ result: existingExams });

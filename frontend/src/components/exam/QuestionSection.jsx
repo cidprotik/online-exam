@@ -6,7 +6,8 @@ import useAnswerStore from '../../zustand/useAnswerStore';
 import { saveUserProgress } from '../../hooks/useUserProgress';
 
 
-const QuestionSection = ({ currentQuestionIndex, setQuestionIndex,selectedOptions }) => {
+const QuestionSection = ({ currentQuestionIndex, setQuestionIndex,selectedOptions,selectedSection }) => {
+  
   const {setSelectedOption,
     getSelectedOption,clearSelectedOption, addAnsweredQuestion,addUnansweredQuestion,removeAnsweredQuestion,removeUnansweredQuestion, addMarkedForReview, removeMarkedForReview, isMarkedForReview } = useAnswerStore();
 
@@ -24,14 +25,14 @@ const QuestionSection = ({ currentQuestionIndex, setQuestionIndex,selectedOption
 
   useEffect(() => {
     const fetchQuestions = async () => {
-      const data = await getallquestion();
+      const data = await getallquestion(selectedSection);
       if (data) {
         setQuestions(data.result);
       }
     };
     
     fetchQuestions();
-  }, []);
+  }, [selectedSection]);
 
  
   useEffect(() => {
@@ -77,6 +78,7 @@ const QuestionSection = ({ currentQuestionIndex, setQuestionIndex,selectedOption
       answeredQuestions: useAnswerStore.getState().answeredQuestions,
       unansweredQuestions: useAnswerStore.getState().unansweredQuestions,
       selectedOptions: useAnswerStore.getState().selectedOptions,
+      selectedSection : `section${selectedSection}`,
     };
 
     await saveProgress(progressData);
@@ -119,6 +121,7 @@ const QuestionSection = ({ currentQuestionIndex, setQuestionIndex,selectedOption
       unansweredQuestions: useAnswerStore.getState().unansweredQuestions,
       selectedOptions: useAnswerStore.getState().selectedOptions,
       markedForReview: useAnswerStore.getState().markedForReview,
+      selectedSection : `section${selectedSection}`,
     }
 
 

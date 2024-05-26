@@ -12,9 +12,13 @@ const ExamSessionSchema = new mongoose.Schema(
           ref: 'Exam',
           required: true,
         },
-        countdownEndTime: {
-          type: Date,
+        storedEndTime: {
+          type: Number,
           required: true,
+        },
+        remainingTime: {
+          type: Number,
+          default: null,
         },
     },
     { timestamps: true }
