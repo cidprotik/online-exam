@@ -2,9 +2,9 @@ import create from 'zustand';
 import { persist } from 'zustand/middleware';
 
 // Define the store with persistence
-const useAnswerStore = create(
+const createSectionStore = (sectionName) => create(
   persist(
-    (set) => ({
+    (set, get) => ({
       answeredQuestions: [], // List of answered questions
       unansweredQuestions: [], // List of unanswered questions
       selectedOptions: {}, // Dictionary of selected options for each question
@@ -44,7 +44,7 @@ const useAnswerStore = create(
         });
       },
       getSelectedOption: (index) => {
-        const state = useAnswerStore.getState();
+        const state = get();
         return state.selectedOptions ? state.selectedOptions[index] : null;
       },
       clearSelectedOption: (index) => {
@@ -89,7 +89,6 @@ const useAnswerStore = create(
       setMarkedForReview: (questions) => {
         set({ markedForReview: questions });
       },
-
       // Method to remove a question index from marked for review
       removeMarkedForReview: (index) => {
         set((state) => {
@@ -97,17 +96,23 @@ const useAnswerStore = create(
           return { markedForReview: updatedMarkedForReview };
         });
       },
-
       // Method to check if a question is marked for review
       isMarkedForReview: (index) => {
-        return useAnswerStore.getState().markedForReview.includes(index);
+        return get().markedForReview.includes(index);
       },
     }),
     {
-      name: 'exam-progress', // Name for persistence in localStorage
-      getStorage: () => localStorage, // Use localStorage for persistence
+      name: `${sectionName}-progress`,
+      getStorage: () => localStorage,
     }
   )
 );
 
-export default useAnswerStore;
+const storeCache = {};
+
+export const useSectionStore = (sectionName) => {
+  if (!storeCache[sectionName]) {
+    storeCache[sectionName] = createSectionStore(sectionName);
+  }
+  return storeCache[sectionName];
+};

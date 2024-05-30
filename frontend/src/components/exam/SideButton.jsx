@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import useGetAllQuestion from '../../hooks/useGetAllQuestion';
-import useAnswerStore from '../../zustand/useAnswerStore';
+import { useSectionStore } from '../../zustand/useAnswerStore';
 
-const SideButton = ({ onSidebarClick }) => {
+const SideButton = ({ onSidebarClick, selectedSection,sectionName }) => {
+  const useAnswerStore = useSectionStore(selectedSection);
   const { answeredQuestions,unansweredQuestions,markedForReview  } = useAnswerStore();
   const { getallquestion, loading } = useGetAllQuestion();
   const [questions, setQuestions] = useState([]);
@@ -10,20 +11,21 @@ const SideButton = ({ onSidebarClick }) => {
   const answermark = answeredQuestions.filter(index =>
     markedForReview.includes(index)
   );
+  console.log("first",unansweredQuestions);
   const onlymark = markedForReview.length - answermark.length;
   const answerno = answeredQuestions.length-answermark.length;
   const notvisited = questions.length - ( answerno + onlymark + unansweredQuestions.length + answermark.length);
 
   useEffect(() => {
     const fetchQuestions = async () => {
-      const data = await getallquestion();
+      const data = await getallquestion(selectedSection);
       if (data) {
         setQuestions(data.result);
       }
     };
 
     fetchQuestions(); // Call the fetching function once when component mounts
-  }, []);
+  }, [selectedSection]);
 
   
   return (
@@ -94,7 +96,7 @@ const SideButton = ({ onSidebarClick }) => {
                     </div>
 
                     <p className="bg-info mt-2 p-2 text-white text-center">
-                      Mathematics Language
+                    {sectionName}
                     </p>
                     <div
                       className="question-numberboard text-center"

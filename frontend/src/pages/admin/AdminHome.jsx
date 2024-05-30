@@ -26,10 +26,6 @@ const AdminHome = () => {
     setShowModal(!showModal);
   };
 
-  if (!data) {
-    return null; // Render nothing until data is fetched
-  }
-
   return (
     <div className="wrapper bg-forgot" >
       <div className="page-wrapper">
@@ -89,8 +85,8 @@ const AdminHome = () => {
                   </div>
                 </div>
               </div>
-              
-      {data.map((exam, index) => (
+           
+      {data && data.map((exam, index) => (
         <div style={{marginTop:"5vh"}}>
         <StartComponent
         key={exam._id}

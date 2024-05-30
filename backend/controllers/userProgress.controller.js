@@ -2,13 +2,11 @@ import UserProgress from "../models/userProgress.model.js";
 
 export const getUserProgress = async (req, res) => {
 	try {
-		const {userId} = req.body;
-		const {examId} = req.body;
-	  // Find the user's progress by their ID
-	  const userProgress = await UserProgress.findOne({ userId });
+	  const {userId,examId,selectedSection} = req.body;
+	  const userProgress = await UserProgress.findOne({ userId,examId,selectedSection });
 	  if (!userProgress) {
-		// If no progress found, create a new record with default values
-		const newUserProgress = new UserProgress({ userId, examId });
+		console.log("first attempt");
+		const newUserProgress = new UserProgress({ userId, examId,selectedSection });
 		await newUserProgress.save();
 		return res.status(200).json(newUserProgress);
 	  }
@@ -23,12 +21,12 @@ export const getUserProgress = async (req, res) => {
 
 export const updateUserProgress = async (req, res) => {
 	try {
-	  const { userId } = req.body; // Assuming user ID is available via auth middleware
-	  const { answeredQuestions, unansweredQuestions,selectedOptions,markedForReview,selectedSection} = req.body;
+	  
+	  const { userId,examId,answeredQuestions, unansweredQuestions,selectedOptions,markedForReview,selectedSection} = req.body;
 	  // Find the user's progress and update it
 	  const updatedProgress = await UserProgress.findOneAndUpdate(
-		{ userId },
-		{ answeredQuestions, unansweredQuestions, selectedOptions,markedForReview,selectedSection},
+		{ userId,examId,selectedSection },
+		{ answeredQuestions, unansweredQuestions, selectedOptions,markedForReview},
 		{ new: true } // Return the updated document
 	  );
   

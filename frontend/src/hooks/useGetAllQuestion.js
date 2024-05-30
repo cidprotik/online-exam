@@ -18,7 +18,7 @@ const useGetAllQuestion = () => {
             const res = await fetch("/api/question/getallquestion", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ examId, section: `section${section}` }),
+                body: JSON.stringify({ examId, section}),
             });
     
             // If the response is not ok, handle the error
