@@ -21,7 +21,7 @@ const AddExamModal = ({ onClose }) => {
     setSections([...sections, `Section ${sections.length + 1}`]);
     setFormData({
       ...formData,
-      sectionData: [...formData.sectionData, {}], // Add a new section data object
+      sectionData: [...formData.sectionData, {section: `section${sections.length + 1}`}], // Add a new section data object
     });
 
     if (errors['sectionData']) {
@@ -48,6 +48,7 @@ const AddExamModal = ({ onClose }) => {
     });
     setActiveSection(null); // Reset active section when removed
   };
+  console.log("formData",formData)
 
   const handleSectionDataChange = (index, field, value) => {
     const updatedSectionData = [...formData.sectionData];

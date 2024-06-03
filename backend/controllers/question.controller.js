@@ -96,7 +96,28 @@ export const getQuestionAll = async (req, res) => {
              existingExams = await Question.find({ examId, section});
         }
         else{
-             existingExams = await Question.find({ examId });
+             //existingExams = await Question.find({ examId }).sort({ section: 1 });
+             const populateData = await Question.find({ examId }).sort({ section: 1 }).populate('examId').exec();
+            existingExams = populateData.map(question => {
+                const exam = question.examId;
+                const matchingSection = exam.sectionData.find(sec => sec.section === question.section);
+                return {
+                    _id: question._id,
+                    q_title: question.q_title,
+                    option1: question.option1,
+                    option2: question.option2,
+                    option3: question.option3,
+                    option4: question.option4,
+                    answer: question.answer,
+                    section: question.section,
+                    sectionName: matchingSection ? matchingSection.sectionName : null,
+                    rightMark: matchingSection ? matchingSection.rightMark : null,
+                    createdAt: question.createdAt,
+                    updatedAt: question.updatedAt
+                };
+            });
+            console.log(existingExams)
+
         }
 
         if (existingExams && existingExams.length > 0) {

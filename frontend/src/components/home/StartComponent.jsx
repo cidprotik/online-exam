@@ -22,7 +22,6 @@ const StartComponent = ({exam}) => {
 
   const examDate = `${day}-${month}-${year}`;
   const examTime = examDateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  console.log("first", examTime);
   const enterExam = () => {
     setExam(exam); // set the current exam as the selected exam
     
@@ -34,10 +33,12 @@ const StartComponent = ({exam}) => {
     }
   };
 
+  const enterResults = () => {
+      navigate('/results',{ state: { examId: exam._id,examName:exam.examname}});
+  };
+
   const toggleModal = () => {
-    
     setShowModal(!showModal);
-    
   };
 
   const handleCheckboxChange = () => {
@@ -103,6 +104,7 @@ const StartComponent = ({exam}) => {
             </button>
             {showModal && <EditExamModal examData={exam} onClose={toggleModal} />}
             <button className="btn btn-sm ml-4 btn-primary" onClick={enterExam}>Exam Details</button>
+            <button className="btn btn-sm ml-4 btn-primary" onClick={enterResults}>Results</button>
           </>  
           ):(<button
             className="btn btn-sm btn-primary"

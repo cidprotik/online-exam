@@ -152,8 +152,19 @@ background-color: #6e7c81!important;
 border-color: #08fb0c!important;
 border-width: 2.5px!important;
 }
+.labelwrong{
+background-color: #6e7c81!important;
+border-color: #fe0000!important;
+border-width: 2.5px!important;
+}
 .selectspan{
   background-color: #08fb0c!important;
+}
+.selectspan2 {
+  box-shadow: inset 0 0 0 5px #08fb0c !important;
+}
+.wrongspan{
+  background-color: #fe0000!important;
 }
 
 .logincard {

@@ -4,12 +4,11 @@ import useExamStore from "../../zustand/useExamStore";
 import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
-  const [data, setData] = useState(null);
+  //const [data, setData] = useState(null);
   const [completed, setCompleted] = useState(false);
   const { selectedExam } = useExamStore();
   const navigate = useNavigate();
-  const aaa = new Date(selectedExam.date_time);
-  console.log("first",aaa)
+
   if (!selectedExam) {
     return (
         <div className="d-flex justify-center align-items-center">

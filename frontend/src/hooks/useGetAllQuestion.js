@@ -8,6 +8,7 @@ const useGetAllQuestion = () => {
     const examId = selectedExam?._id;
 
     const getallquestion = async (section) => {
+        console.log("section", section);
         // Check if section is undefined, if so, return early
         if (section === undefined) {
             return;

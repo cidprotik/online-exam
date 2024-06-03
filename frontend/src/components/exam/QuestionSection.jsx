@@ -51,10 +51,11 @@ const QuestionSection = ({ currentQuestionIndex, setQuestionIndex, selectedOptio
 
   useEffect(() => {
     const storedOption = getSelectedOption(currentQuestionIndex);
-    
+    const mark= isMarkedForReview(currentQuestionIndex);
+  
     setSelectedOptionLocal(storedOption);
     
-    if (storedOption === undefined || storedOption === null) {
+    if (!mark && (storedOption === undefined || storedOption === null)) {
       addUnansweredQuestion(currentQuestionIndex);
     } 
    
@@ -90,6 +91,7 @@ const QuestionSection = ({ currentQuestionIndex, setQuestionIndex, selectedOptio
 
   const handleNextQuestion = async () => {
     const currentQuestion = questions[currentQuestionIndex];
+
     if (currentQuestion && selectedOption) {
       const apiData = {
         questionId: currentQuestion._id,

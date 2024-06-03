@@ -1,5 +1,8 @@
+import Answer from "../models/answer.model.js";
 import Exam from "../models/exam.model.js";
 import ExamSession from "../models/examSession.js"
+import Question from "../models/question.model.js";
+import SubmitExam from "../models/submitExam.model.js";
 
 export const addExam = async (req, res) => {
 	try {
@@ -202,3 +205,104 @@ export const saveCountdownEndTime = async (req, res) => {
         res.status(500).json({ success: false, message: 'Error fetching countdown end time', error });
       }
   };
+
+  export const submitExam = async (req, res) => {
+    const { userId, examId ,submit } = req.body;
+  
+    try {
+
+        const correctAnswers = await Question.find({ examId },{ answer: 1,section:1 });
+        const correctAnswersMap = new Map(correctAnswers.map(q => [q._id.toString(), { answer: q.answer, section: q.section }]));
+        const submittedAnswers = await Answer.find({ userId, examId },{questionId:1, answer:1});
+        const exam = await Exam.findById(examId, { sectionData: 1 });
+
+        const sectionDataMap = new Map(exam.sectionData.map(s => [s.section, { rightMark: s.rightMark, wrongMark: s.wrongMark }]));
+
+        let totalCorrect = 0;
+        let totalwrong = 0;
+        let marksObtain = 0;
+        let correctMarks = 0;
+        let negativeMarks = 0;
+        const results = submittedAnswers.map(submittedAnswer => {
+        const correctAnswer = correctAnswersMap.get(submittedAnswer.questionId.toString());
+        const isCorrect = correctAnswer ? submittedAnswer.answer === correctAnswer.answer : false;
+        const sectionInfo = correctAnswer ? sectionDataMap.get(correctAnswer.section) : { rightMark: 0, wrongMark: 0 };
+        const marks = isCorrect ? sectionInfo.rightMark : -sectionInfo.wrongMark;
+        const q_marks = sectionInfo.rightMark;
+      if (isCorrect) {
+        totalCorrect += 1;
+        correctMarks += sectionInfo.rightMark;
+      }
+      else{
+        totalwrong += 1;
+        negativeMarks += sectionInfo.wrongMark;
+      }
+
+      marksObtain = totalCorrect - totalwrong;
+
+      return {
+        questionId: submittedAnswer.questionId,
+        isCorrect,
+        submittedAnswer: submittedAnswer.answer,
+        correctAnswer: correctAnswer.answer,
+        section:correctAnswer.section,
+        q_marks,
+        marks: marks
+      };
+    });
+    if (submit) {
+        const examSubmit = {
+          userId,
+          examId,
+          answered: submittedAnswers.length,
+          totalCorrect,
+          totalwrong,
+          correctMarks,
+          negativeMarks,
+          marksObtain,
+        };
+  
+         await SubmitExam.findOneAndUpdate(
+            { userId, examId },
+            examSubmit,
+            { new: true, upsert: true } // Create the document if it doesn't exist
+          );
+        return res.status(200).json(examSubmit);
+    }
+    else{
+        return res.status(200).json({ 
+            totalCorrect,
+            answered: submittedAnswers.length,
+            totalCorrect,
+            totalwrong,
+            correctMarks,
+            negativeMarks,
+            marksObtain, 
+            results 
+        });
+    }
+    
+
+    } catch (error) {
+      res.status(500).json({ message: 'Server error', error });
+    }
+  };
+
+  export const getResultsAll = async (req, res) => {
+    try {
+        const examId = req.body; // Access specific property
+        const existingResults = await SubmitExam.find(examId).populate({
+            path: 'userId',
+            select: '_id fullName username' // Specify the fields you want to retrieve
+        });
+
+        if (existingResults && existingResults.length > 0) {
+            return res.status(200).json({ result: existingResults });
+        } else {
+            return res.status(404).json({ error: "No one Submitted The Exam Yet" });
+        }
+    } catch (error) {
+        console.error("Error in exam controller:", error.message);
+        return res.status(500).json({ error: "Internal Server Error" });
+    }
+};

@@ -9,6 +9,9 @@ import Start from "./pages/home/Start";
 import Exam from "./pages/exam/Exam";
 import AdminHome from "./pages/admin/AdminHome";
 import ExamDetails from "./pages/admin/ExamDetails";
+import ExamSubmit from "./pages/exam/ExamSubmit";
+import Results from "./pages/exam/Results";
+import ResultDetails from "./pages/exam/ResultDetails";
 
 function App() {
   const { authUser } = useAuthContext();
@@ -25,6 +28,9 @@ function App() {
         <Route path='/instraction' element={authUser ? <Home /> : <Navigate to='/login' />}  />
         <Route path='/exam' element={authUser ? <Exam /> : <Navigate to='/login' />}  />
         <Route path='/examdetails' element={authUser ? <ExamDetails /> : <Navigate to='/login' />}  />
+        <Route path='/examsubmit' element={authUser ? <ExamSubmit /> : <Navigate to='/login' />}  />
+        <Route path='/results' element={authUser ? <Results /> : <Navigate to='/login' />}  />
+        <Route path='/result-details' element={authUser ? <ResultDetails /> : <Navigate to='/login' />}  />
       </Routes>
     <Toaster />
     </div>

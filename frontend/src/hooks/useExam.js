@@ -2,7 +2,6 @@ import { useState } from "react";
 import { toast } from "react-hot-toast";
 
 
-
 export const useAddExam= () => {
 	const [loading, setLoading] = useState(false);
     
@@ -133,4 +132,65 @@ export const useSaveCountdown= () => {
 	};
 
 	return { savecountdown};
+};
+
+export const useSubmitExam= () => {
+	
+	
+    const [submitting, setLoading] = useState(false);
+	const submitexam = async (submitData) => {
+		
+		setLoading(true);
+		try {
+			const res = await fetch("/api/exam/submit-exam", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(submitData),
+			});
+			
+			const data = await res.json();
+			if(!submitData.submit);{
+				return data;
+			}
+			if (data.error) {
+				throw new Error(data.error);
+			}
+
+		} catch (error) {
+			toast.error(error.message);
+		} 
+		finally {
+			setLoading(false);
+		}
+	};
+
+	return { submitting,submitexam};
+};
+
+export const useGetResults= () => {
+	const [loading, setLoading] = useState(false);
+	
+	const getresults = async (formData) => {
+
+		setLoading(true);
+
+		try {
+			const res = await fetch("/api/exam/resultsall", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(formData),
+			});
+
+			const data = await res.json();
+			return data;
+
+		} catch (error) {
+			toast.error(error.message);
+		}
+		finally {
+			setLoading(false);
+		} 
+	};
+
+	return {loading, getresults};
 };
