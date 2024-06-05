@@ -82,7 +82,7 @@ const Results = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {results.length > 0 ?(
+                    {results && results.length > 0 ?(
                     results.map((result, index) => (
                       <tr key={result.id} className="hover:bg-gray-100" style={{ borderBottom: '2px solid #ccc' }}>
                         <td className='text-center border-2'>{index + 1}</td>

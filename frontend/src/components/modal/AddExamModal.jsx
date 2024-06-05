@@ -11,6 +11,7 @@ const AddExamModal = ({ onClose }) => {
     date_time: '',
     duration: '',
     totalquestion: '',
+    totalnumber:'',
     sectionData: [], // Add state to manage section data
   });
 
@@ -56,9 +57,19 @@ const AddExamModal = ({ onClose }) => {
       ...updatedSectionData[index],
       [field]: value,
     };
+    if (field === 'maxAnswer' || field === 'rightMark') {
+      const maxAnswer = updatedSectionData[index].maxAnswer || 0;
+      const rightMark = updatedSectionData[index].rightMark || 0;
+      updatedSectionData[index].sectionMaxNumber = maxAnswer * rightMark;
+    }
+    const totalNumber = updatedSectionData.reduce((acc, section) => acc + (section.sectionMaxNumber || 0), 0);
+    const totalQuestion = updatedSectionData.reduce((acc, section) => acc + parseInt(section.maxAnswer || 0), 0);
+    
     setFormData({
       ...formData,
       sectionData: updatedSectionData,
+      totalnumber: totalNumber,
+      totalquestion :totalQuestion
     });
 
     
@@ -99,7 +110,7 @@ const AddExamModal = ({ onClose }) => {
     if (!data.examName) errors.examName = 'Exam name is required';
     if (!data.date_time) errors.date_time = 'Date and time are required';
     if (!data.duration) errors.duration = 'Duration is required';
-    if (!data.totalquestion) errors.totalquestion = 'Total question is required';
+    //if (!data.totalquestion) errors.totalquestion = 'Total question is required';
 
     data.sectionData.forEach((section, index) => {
       if (!section.sectionName) {
@@ -145,11 +156,9 @@ const AddExamModal = ({ onClose }) => {
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length === 0 && formData.sectionData.length > 0) {
-      console.log('formdata', formData);
       await addexam(formData);
       onClose();
     } else if (formData.sectionData.length === 0) {
-      // If no section is added, set an error indicating that at least one section is required
       setErrors((prevErrors) => ({
         ...prevErrors,
         sectionData: "At least one section is required",
@@ -186,15 +195,18 @@ const AddExamModal = ({ onClose }) => {
                     />
                     {errors.date_time && <span className="text-danger">{errors.date_time}</span>}
                   </div>
-                  <div className="col-md-6 pb-3">
+                  <div className="col-md-4 pb-3">
                     <label htmlFor="duration" className={`form-label ${errors.duration? 'text-danger' : ''}`}>Duration(Minute)</label>
                     <input type="text" className={`form-control ${errors.duration? 'is-invalid' : ''}`} id="duration" name="duration" onChange={(e) => handleFormChange('duration', e.target.value)}/>
                     {errors.duration && <span className="text-danger">{errors.duration}</span>}
                   </div>
-                  <div className="col-md-6 pb-3">
-                    <label htmlFor="totalquestion" className={`form-label ${errors.totalquestion? 'text-danger' : ''}`}>Total Question</label>
-                    <input type="number" className={`form-control ${errors.totalquestion? 'is-invalid' : ''}`} id="totalquestion" name="totalquestion" onChange={(e) => handleFormChange('totalquestion', e.target.value)}/>
-                    {errors.totalquestion && <span className="text-danger">{errors.totalquestion}</span>}
+                  <div className="col-md-4 pb-3">
+                    <label htmlFor="totalquestion" className="form-label">Total Question</label>
+                    <input type="number" className="form-control" value={formData.totalquestion || ''} disabled/>
+                  </div>
+                  <div className="col-md-4 pb-3">
+                    <label htmlFor="totalnumber" className='form-label'>Total Number</label>
+                    <input type="number" className="form-control" value={formData.totalnumber || ''} disabled />
                   </div>
                   <div className="col-md-6 pb-3">
                     <button type="button" className="btn btn-sm btn-primary" onClick={addNewSection}>Add New Section</button>
@@ -221,6 +233,11 @@ const AddExamModal = ({ onClose }) => {
                     <label  className={`form-label ${errors[`sectionName_${activeSection}`]? 'text-danger' : ''}`}>Section Name</label>
                         <input type="text" className={`form-control sec_name${activeSection+1} ${errors[`sectionName_${activeSection}`]? 'is-invalid' : ''}`} value={formData.sectionData[activeSection]?.sectionName || ''} onChange={(e) => handleSectionDataChange(activeSection, 'sectionName', e.target.value)} placeholder={`Input for ${sections[activeSection]}`} />
                         {errors[`sectionName_${activeSection}`] && <span className="text-danger">{errors[`sectionName_${activeSection}`]}</span>}
+                    </div>
+
+                    <div className="col-md-6 mb-1">
+                      <label className="form-label">Section Maximum Number</label>
+                      <input type="number" className="form-control" value={formData.sectionData[activeSection]?.sectionMaxNumber || ''} disabled />
                     </div>
 
                     <div className="col-md-6 mb-1">

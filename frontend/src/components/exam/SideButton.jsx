@@ -42,7 +42,7 @@ const SideButton = ({ onSidebarClick, selectedSection, sectionName }) => {
   }, [selectedSection]);
 
   const handleSubmitExam = async() => {
-    if (confirm('Are you sure you want to submit?')) {
+    if (confirm('You have Still Time Left. Are you sure to submit the Exam?')) {
       const submitData = {
         examId,
         userId,

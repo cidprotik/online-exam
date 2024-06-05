@@ -15,8 +15,6 @@ const ExamHeader = () => {
   const {  getcountdown } = useGetCountdown();
   const { savecountdown } = useSaveCountdown();
 
-  const countdownEndKey = 'countdownEndTime';
-  const remainingTimeKey = 'remainingTime';
   const [endTime, setEndTime] = useState(null);
   const [isExamEnded, setIsExamEnded] = useState(false);
 
@@ -28,7 +26,7 @@ const ExamHeader = () => {
   
         let storedEndTime = response?.storedEndTime ?? null;
         let remainingTime = response?.remainingTime ?? null;
-  
+
         if (remainingTime) {
           remainingTime = parseInt(remainingTime, 10);
           storedEndTime = currentTime + remainingTime;

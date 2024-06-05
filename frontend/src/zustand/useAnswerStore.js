@@ -72,10 +72,7 @@ const createSectionStore = (sectionName) => create(
         set({ unansweredQuestions: questions });
       },
       fetchSelectedOptions: (selectedOptions) => {
-        set((state) => {
-          // Copy the existing state and update it with the new selectedOptions
-          return { selectedOptions: { ...state.selectedOptions, ...selectedOptions } };
-        });
+        set({ selectedOptions: selectedOptions });
       },
       addMarkedForReview: (index) => {
         set((state) => {

@@ -228,7 +228,7 @@ export const saveCountdownEndTime = async (req, res) => {
         const isCorrect = correctAnswer ? submittedAnswer.answer === correctAnswer.answer : false;
         const sectionInfo = correctAnswer ? sectionDataMap.get(correctAnswer.section) : { rightMark: 0, wrongMark: 0 };
         const marks = isCorrect ? sectionInfo.rightMark : -sectionInfo.wrongMark;
-        const q_marks = sectionInfo.rightMark;
+        
       if (isCorrect) {
         totalCorrect += 1;
         correctMarks += sectionInfo.rightMark;
@@ -238,7 +238,7 @@ export const saveCountdownEndTime = async (req, res) => {
         negativeMarks += sectionInfo.wrongMark;
       }
 
-      marksObtain = totalCorrect - totalwrong;
+      marksObtain = correctMarks - negativeMarks;
 
       return {
         questionId: submittedAnswer.questionId,
@@ -246,7 +246,6 @@ export const saveCountdownEndTime = async (req, res) => {
         submittedAnswer: submittedAnswer.answer,
         correctAnswer: correctAnswer.answer,
         section:correctAnswer.section,
-        q_marks,
         marks: marks
       };
     });
@@ -284,6 +283,7 @@ export const saveCountdownEndTime = async (req, res) => {
     
 
     } catch (error) {
+      console.log("Error in exam controller", error.message);
       res.status(500).json({ message: 'Server error', error });
     }
   };

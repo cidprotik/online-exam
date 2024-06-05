@@ -1,14 +1,29 @@
 import React from 'react';
 import useExamStore from "../../zustand/useExamStore";
+import { useNavigate } from 'react-router-dom';
+import { useAuthContext } from '../../context/AuthContext';
+import { useSubmitExam } from '../../hooks/useExam';
 
 const ExamEndModal = ({ isOpen, onClose, message }) => {
 
- const { selectedExam } = useExamStore();
+  const { authUser } = useAuthContext();
+  const { selectedExam } = useExamStore();
+  const userId = authUser._id;
+  const examId = selectedExam._id;
+  const navigate = useNavigate();
+  const {submitting,submitexam} = useSubmitExam();
 
   if (!isOpen) return null;
 
-  const handleSubmit = () => {
-    // Call the onClose function to close the modal
+  const handleSubmitExam = async() => {
+    const submitData = {
+      examId,
+      userId,
+      submit:true,
+    };
+
+    // await submitexam(submitData);
+    // navigate('/examsubmit');
     onClose();
   };
 
@@ -32,7 +47,7 @@ const ExamEndModal = ({ isOpen, onClose, message }) => {
           </div>
           <hr />
           <div className="modal-action d-flex justify-center ">
-            <button className="btn btn-success" onClick={handleSubmit}>
+            <button className="btn btn-success" onClick={handleSubmitExam}>
               Submit
             </button>
           </div>

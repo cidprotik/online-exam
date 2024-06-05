@@ -150,6 +150,7 @@ export const useSubmitExam= () => {
 			
 			const data = await res.json();
 			if(!submitData.submit);{
+				toast.success("Successfully submitted the Exam");
 				return data;
 			}
 			if (data.error) {

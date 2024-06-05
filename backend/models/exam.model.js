@@ -5,6 +5,7 @@ const sectionSchema = new mongoose.Schema({
 	sectionName: String,
 	noQuestion: Number,
 	maxAnswer: Number,
+	sectionMaxNumber: Number,
 	rightMark: Number,
 	wrongMark: Number,
   });
