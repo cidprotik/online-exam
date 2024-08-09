@@ -262,7 +262,7 @@ const ResultTable = ({ summary }) => (
 
             <td className='text-center border-2'>{summary.answered}</td>
             <td className='text-center border-2'>{summary.totalCorrect}</td>
-            <td className='text-center border-2'>{summary.totalwrong}</td>
+            <td className='text-center border-2'>{summary.totalWrong}</td>
             <td className='text-center border-2'>{summary.correctMarks}</td>
             <td className='text-center border-2'>{summary.negativeMarks}</td>
             <td className='text-center border-2'>{summary.marksObtain}</td>

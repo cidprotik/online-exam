@@ -12,6 +12,7 @@ const ExamSubmit = () => {
     return () => clearTimeout(logoutTimeout);
 }, []); 
 
+
     return (
         <div className="d-flex vh-100 bg-forgot justify-content-center align-items-center">
           <div className='card-container w-80'>
@@ -21,6 +22,9 @@ const ExamSubmit = () => {
                   <h2 style={{fontWeight: "bolder", fontSize: "25px"}}>Your Exam Summary</h2>
                  </div>
               </div>
+              <div className="d-flex justify-content-center pt-3">
+                  <h2 style={{fontWeight: "bolder", fontSize: "25px"}} className='bg-accent'>Successfully Submitted the Exam</h2>
+                 </div>
               <ul className="list-group list-group-flush">
                 <li className="list-group-item d-flex bg-transparent justify-content-between align-items-center">
                   Total Questions
